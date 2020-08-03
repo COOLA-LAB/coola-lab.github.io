@@ -258,6 +258,166 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/" itemprop="url">Weakly Supervised Semantic Segmentation with Boundary Exploration</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-03T19:57:08+08:00">
+                2020-08-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-问题定位"><a href="#1-问题定位" class="headerlink" title="1 问题定位"></a>1 问题定位</h2><p>语义分割作为经典的计算机视觉的问题，从15年的FCN到之后的deeplab等，语义分割模型在自动驾驶，场景理解等场景都有较多的应该场景，同时也对神经网络的解释性产生一定的促进作用。对于输入的RGB图像或者灰度图，模型需要能够输出特定类别的区域，对于未设置的类别均作为背景处理。但是经典的语义分割模型都是使用像素级别的标签做监督，而这种标签在标注时非常耗时耗力，因为大家开始尝试使用弱监督(低于像素级别的监督)来完成语义分割任务，常见的弱监督包括：bounding box / scribble / image-level，本文也是基于image-level，图像级别的标签作为监督。该监督最为常见且监督级别最低，难度也较大。</p>
+<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2 相关工作"></a>2 相关工作</h2><p>大部分文章的解决思路是使用localization技术获取物体的初始位置信息，之后通过策略将初始定位结果进行优化。可以视为两阶段的localization-coarse。<br>localization方面，经典的技术包括saliency detection和CAM:</p>
+<ul>
+<li>CAM是使用全卷积网络提取特征，之后使用20个1x1的卷积核过滤，在将20张特征图通过GAP转换为20个标量值，使用多标签损失函数训练之后，20张特征图就对应20个类别的激活图。</li>
+<li>saliency map是将分类模型的梯度反向传播回原图得到高激活值的区域即对应类别的位置。在反向传播的过程中，如果一个节点正向传播时没有激活，那么该节点不进行反向传播的梯度传递。<br>  coarse方面:</li>
+<li>实现思路各式各样，不过主要要解决的问题是localization的定位面积过小，所以很多工作聚焦在鼓励类别区域扩撒，同时扩散的过程中保持边界性(由CRF完成)。</li>
+</ul>
+<h2 id="3-文章工作"><a href="#3-文章工作" class="headerlink" title="3 文章工作"></a>3 文章工作</h2><p>对于CAM进行了改进，提出了attention-pooling CAM。</p>
+<ul>
+<li>全卷积网络之后得到20张特征图$F_c$，对于每张$F_c$得各个位置，乘以参数$k$之后过一层softmax，得到attention map$A_c$。最终对应类别的置信度为特征图与attention map对应位置相乘后相加的值$P_c = \sum(F_c\times A_c)$</li>
+<li>在梯度更新的反向传播时，attention map部分的梯度不进行传递。</li>
+<li>训练收敛后的$F_c$即对应类别定位图。</li>
+</ul>
+<p>对于优化部分，目标是显式的预测类别的边界，通过规则将attention-pooling CAM的结果进行过滤，得到少量的标签正样本和较多的负样本以及无关的标签(不参与训练)。</p>
+<ul>
+<li>构造一个网络用于预测物体边界，属于边界二分类网络。训练数据使用从CAM合成得到的标签数据，损失函数方面由于样本的不均衡性所以做了归一化。如下<script type="math/tex; mode=display">L_{B}=-\sum_{i \in \Phi_{b r y}} \frac{W_{i} \log \left(P_{i}\right)}{\left|\Phi_{b r y}\right|}-\frac{1}{2}\left(\sum_{i \in \Phi_{c}} \frac{\log \left(1-P_{i}\right)}{\left|\Phi_{c}\right|}+\sum_{i \in \Phi_{b g}} \frac{\log \left(1-P_{i}\right)}{\left|\Phi_{b g}\right|}\right)</script></li>
+<li>通过训练更多的类别边界得到挖掘，之后使用IRNet文章的工作，将边界图转换为亲和度矩阵，计算每个位置与其邻近像素之间的亲和度关系，作为概率转移矩阵，模拟随机游走扩散，对CAM的结果进行优化。</li>
+</ul>
+<p>经过优化之后，segmentation的结果就比较不错了，之后使用类似retrain的思路，将生成的语义分割结果和原图以全监督的方式训练deeplab模型，以得到最终的结果。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/21/Improving-Law-Enforcement-Daily-Deployment-Through-Machine-Learning-Informed-Optimization-under-Uncertainty/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -686,7 +846,7 @@ c x+k, & x>0
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -708,7 +868,7 @@ c x+k, & x>0
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
