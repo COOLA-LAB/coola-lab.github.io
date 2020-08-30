@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="弱监督,语义分割," />
+  <meta name="keywords" content="frame seclection," />
 
 
 
@@ -79,18 +79,23 @@
 
 
 
-<meta name="description" content="1 问题定位语义分割作为经典的计算机视觉的问题，从15年的FCN到之后的deeplab等，语义分割模型在自动驾驶，场景理解等场景都有较多的应该场景，同时也对神经网络的解释性产生一定的促进作用。对于输入的RGB图像或者灰度图，模型需要能够输出特定类别的区域，对于未设置的类别均作为背景处理。但是经典的语义分割模型都是使用像素级别的标签做监督，而这种标签在标注时非常耗时耗力，因为大家开始尝试使用弱监督(">
+<meta name="description" content="1 Introduce本文中的场景为视频的快速描述，问题的输入是一段视频序列，输出是视频的类别或标签。目标为efficient video recognition。这类问题一般会对视频均匀采样取帧，这默认了视频的信息是均匀分布的，但实际上并非如此，均匀采样会取到无用的背景帧或冗余的信息帧。  分类任务的类别不同，需要的帧数通常也不同，静态物体的识别一般只需要一帧，而复杂的动作识别需要多帧，同类别间">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Weakly Supervised Semantic Segmentation with Boundary Exploration">
-<meta property="og:url" content="http://yoursite.com/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/index.html">
+<meta property="og:title" content="AdaFrame - Adaptive Frame Selection for Fast Video Recognition">
+<meta property="og:url" content="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/index.html">
 <meta property="og:site_name" content="COOLA-LAB">
-<meta property="og:description" content="1 问题定位语义分割作为经典的计算机视觉的问题，从15年的FCN到之后的deeplab等，语义分割模型在自动驾驶，场景理解等场景都有较多的应该场景，同时也对神经网络的解释性产生一定的促进作用。对于输入的RGB图像或者灰度图，模型需要能够输出特定类别的区域，对于未设置的类别均作为背景处理。但是经典的语义分割模型都是使用像素级别的标签做监督，而这种标签在标注时非常耗时耗力，因为大家开始尝试使用弱监督(">
-<meta property="article:published_time" content="2020-08-03T11:57:08.000Z">
-<meta property="article:modified_time" content="2020-08-19T02:08:51.401Z">
+<meta property="og:description" content="1 Introduce本文中的场景为视频的快速描述，问题的输入是一段视频序列，输出是视频的类别或标签。目标为efficient video recognition。这类问题一般会对视频均匀采样取帧，这默认了视频的信息是均匀分布的，但实际上并非如此，均匀采样会取到无用的背景帧或冗余的信息帧。  分类任务的类别不同，需要的帧数通常也不同，静态物体的识别一般只需要一帧，而复杂的动作识别需要多帧，同类别间">
+<meta property="og:image" content="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/1.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/2.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/3.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/4.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/5.png">
+<meta property="article:published_time" content="2020-08-30T08:57:38.000Z">
+<meta property="article:modified_time" content="2020-08-30T09:07:15.530Z">
 <meta property="article:author" content="COOLA-LAB">
-<meta property="article:tag" content="弱监督">
-<meta property="article:tag" content="语义分割">
+<meta property="article:tag" content="frame seclection">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/1.png">
 
 
 
@@ -120,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/"/>
 
 
 
 
 
-  <title>Weakly Supervised Semantic Segmentation with Boundary Exploration | COOLA-LAB</title>
+  <title>AdaFrame - Adaptive Frame Selection for Fast Video Recognition | COOLA-LAB</title>
   
 
 
@@ -263,7 +268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="COOLA-LAB">
@@ -280,7 +285,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Weakly Supervised Semantic Segmentation with Boundary Exploration</h1>
+          <h1 class="post-title" itemprop="name headline">AdaFrame - Adaptive Frame Selection for Fast Video Recognition</h1>
         
 
         <div class="post-meta">
@@ -292,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-03T19:57:08+08:00">
-                2020-08-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-30T16:57:38+08:00">
+                2020-08-30
               </time>
             
 
@@ -352,25 +357,60 @@
       
 
       
-        <h2 id="1-问题定位"><a href="#1-问题定位" class="headerlink" title="1 问题定位"></a>1 问题定位</h2><p>语义分割作为经典的计算机视觉的问题，从15年的FCN到之后的deeplab等，语义分割模型在自动驾驶，场景理解等场景都有较多的应该场景，同时也对神经网络的解释性产生一定的促进作用。对于输入的RGB图像或者灰度图，模型需要能够输出特定类别的区域，对于未设置的类别均作为背景处理。但是经典的语义分割模型都是使用像素级别的标签做监督，而这种标签在标注时非常耗时耗力，因为大家开始尝试使用弱监督(低于像素级别的监督)来完成语义分割任务，常见的弱监督包括：bounding box / scribble / image-level，本文也是基于image-level，图像级别的标签作为监督。该监督最为常见且监督级别最低，难度也较大。</p>
-<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2 相关工作"></a>2 相关工作</h2><p>大部分文章的解决思路是使用localization技术获取物体的初始位置信息，之后通过策略将初始定位结果进行优化。可以视为两阶段的localization-coarse。<br>localization方面，经典的技术包括saliency detection和CAM:</p>
-<ul>
-<li>CAM是使用全卷积网络提取特征，之后使用20个1x1的卷积核过滤，在将20张特征图通过GAP转换为20个标量值，使用多标签损失函数训练之后，20张特征图就对应20个类别的激活图。</li>
-<li>saliency map是将分类模型的梯度反向传播回原图得到高激活值的区域即对应类别的位置。在反向传播的过程中，如果一个节点正向传播时没有激活，那么该节点不进行反向传播的梯度传递。<br>  coarse方面:</li>
-<li>实现思路各式各样，不过主要要解决的问题是localization的定位面积过小，所以很多工作聚焦在鼓励类别区域扩撒，同时扩散的过程中保持边界性(由CRF完成)。</li>
+        <h2 id="1-Introduce"><a href="#1-Introduce" class="headerlink" title="1 Introduce"></a>1 Introduce</h2><p>本文中的场景为视频的快速描述，问题的输入是一段视频序列，输出是视频的类别或标签。目标为efficient video recognition。这类问题一般会对视频均匀采样取帧，这默认了视频的信息是均匀分布的，但实际上并非如此，均匀采样会取到无用的背景帧或冗余的信息帧。</p>
+<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/1.png" alt></p>
+<p>分类任务的类别不同，需要的帧数通常也不同，静态物体的识别一般只需要一帧，而复杂的动作识别需要多帧，同类别间也有可能需要不同帧数。 </p>
+<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/2.png" alt></p>
+<h2 id="2-Approach"><a href="#2-Approach" class="headerlink" title="2 Approach"></a>2 Approach</h2><p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/3.png" alt></p>
+<p>此图为网络的整体结构图。memory-agumented LSTM的输入是一个视频帧序列，在每个step中，将</p>
+<ol>
+<li>当前帧的特征vt</li>
+<li>前一个step的状态h(t-1)、c(t-1)</li>
+<li>从golbal memory中得到的Global context ut</li>
+</ol>
+<p>输入到LSTM中，得到当前step的隐藏状态h(t)，之后h(t)用来计算</p>
+<ol>
+<li>通过Prediction Network得到prediction向量st，用来计算Reward</li>
+<li>通过Selection Network得到action a，用来决定下一步看哪一帧图像</li>
+<li>通过Utility Network得到utility vt，用来判断继续看下一帧的预期收益</li>
+</ol>
+<h3 id="2-1-Memory-agumented-LSTM"><a href="#2-1-Memory-agumented-LSTM" class="headerlink" title="2.1 Memory-agumented LSTM"></a>2.1 Memory-agumented LSTM</h3><script type="math/tex; mode=display">
+h_{t},c_{t}=LSTM([v_{t},u_{t}],h_{t-1},c_{t-1})</script><p>帧特征 vt 跟 全局上下文特征 ut 拼接起来作为当前LSTM单元的输入。</p>
+<h4 id="Global-memory"><a href="#Global-memory" class="headerlink" title="Global memory"></a>Global memory</h4><p>global memory部分用于提供上下文信息，它的输入是经过空间和时间上降采样取到的帧的集合，用一个lightweight CNN分别提取他们的特征.</p>
+<script type="math/tex; mode=display">
+M=[v_1^s,v_1^s,...,v_{T_d}^s]</script><p>M为特征集合，由于只是分别对各个帧使用2D CNN，没有利用到时间信息，因此使用PE（position encoding）的方法来将位置信息嵌入到frames represetations中。</p>
+<script type="math/tex; mode=display">
+z_{t,j}=(W_hh_{t-1})^TPE(v_j^s)</script><p>使用soft-attention来获取global context information。根据上一个时刻的隐藏状态h(t-1)来给每个frame representation加上attention权值</p>
+<script type="math/tex; mode=display">
+\beta _t=Softmax(z_t)</script><script type="math/tex; mode=display">
+u_t = \beta _t^TM</script><h4 id="Reward-function"><a href="#Reward-function" class="headerlink" title="Reward function"></a>Reward function</h4><script type="math/tex; mode=display">
+    r_t=max\{0,m_t - max_{t^, \in[0,t-1]} m_{t^,}\}</script><script type="math/tex; mode=display">
+    m_t=s_t^{g^t}-max\{s_t^{c^,}|c^,\ne gt \}</script><p>mt代表预测出的对于ground-true类别的可能性比其他类别可能性最大值之间的差距。优化过程中会增大这个差距。Reward函数激励这个margin比历史margin更大，这样设计reward的目的是衡量这一帧是否有助于增大ground-true class的probability，这个帧是否是有意义的。</p>
+<h4 id="Selection-network"><a href="#Selection-network" class="headerlink" title="Selection network"></a>Selection network</h4><p>Selecttion network用来决定下一个step看哪一帧。</p>
+<script type="math/tex; mode=display">
+f_s(h_t;W_s)=a_t = sigmoid(W_s^Th_t)</script><p>直接用一个全连接层将隐藏状态ht映射到一个value上。然后再加上一个高斯分布采样（方差固定为0.01）。加入高斯分布的目的是在训练过程中加入噪声。在inference阶段不用高斯分布采样，直接用at，乘以总帧数就是下一帧的位置。可以发现下一帧不一定是后面的帧，也可以是前面的帧。</p>
+<p>这样训练selection network来最大化期望reward：</p>
+<script type="math/tex; mode=display">
+J_{sel}(W_s)=E_{l_t~\pi(.|h_t;W_s)[\sum _{t=0}^{T_e}r_t]}</script><h4 id="Utility-network"><a href="#Utility-network" class="headerlink" title="Utility network"></a>Utility network</h4><script type="math/tex; mode=display">
+f_u(h_t;W_u)=\hat V_t =W_u^Th</script><p>用一个全连接层ht映射为Vt，代表approximation of expected future rewards，其中expected future rewards可以采用公式计算：</p>
+<script type="math/tex; mode=display">
+V_t=E_{h_t{t+1}:T_e,a_t:T_e}[\sum_{t=0}^{T_e-t}\gamma^ir_{t+i}]</script><p>通过损失函数来训练：</p>
+<script type="math/tex; mode=display">
+L_{utl}(W_u)= {1\over 2}||\hat V_t-V_t||_2</script><h4 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h4><p>综合上述损失函数，最终的目标函数为：</p>
+<script type="math/tex; mode=display">
+minimize_\Theta L_{cls}+\lambda L_{utl}-\lambda J_{sel}</script><p>前两项可微，可以使用SGD反向传播更新参数即可。</p>
+<p>分析第三项的梯度如下：</p>
+<script type="math/tex; mode=display">
+\nabla _\Theta J_{sel} = E[\sum _{t=0}^{T_e}(R_t-\hat V_t)\nabla _\Theta log\pi _\Theta(.|h_t)]</script><p>vt作为baseline减小方差。Rt代表expected future reward。在一个mini-batch中用Monte-Carlo sampling来拟合。</p>
+<h3 id="2-2-Adaptive-Lookahead-Inference"><a href="#2-2-Adaptive-Lookahead-Inference" class="headerlink" title="2.2 Adaptive Lookahead Inference"></a>2.2 Adaptive Lookahead Inference</h3><p>前面讲到的utility network用来预测expected future rewards，看到将来取更多帧所带来的好处。因此根据utility network的输出来决定继续或者停止取帧。在每个时刻都计算vt，并记录vt的最大值，如果有p次当前值比最大值大一个阈值margin，则可停止。</p>
+<h2 id="3-Experiment"><a href="#3-Experiment" class="headerlink" title="3 Experiment"></a>3 Experiment</h2><h3 id="Dataset"><a href="#Dataset" class="headerlink" title="Dataset"></a>Dataset</h3><ul>
+<li><p>FCVID：91, 223 videos from YouTube. 共239个类别，平均167秒。trainset：45, 611 testset：45, 612</p>
+</li>
+<li><p>ACTIVITYNET：20K videos，共200个类别。平均117秒。train,val,test=10, 024 vs 4, 926 vs 5, 044。用val作为test。</p>
+</li>
 </ul>
-<h2 id="3-文章工作"><a href="#3-文章工作" class="headerlink" title="3 文章工作"></a>3 文章工作</h2><p>对于CAM进行了改进，提出了attention-pooling CAM。</p>
-<ul>
-<li>全卷积网络之后得到20张特征图$F_c$，对于每张$F_c$得各个位置，乘以参数$k$之后过一层softmax，得到attention map$A_c$。最终对应类别的置信度为特征图与attention map对应位置相乘后相加的值$P_c = \sum(F_c\times A_c)$</li>
-<li>在梯度更新的反向传播时，attention map部分的梯度不进行传递。</li>
-<li>训练收敛后的$F_c$即对应类别定位图。</li>
-</ul>
-<p>对于优化部分，目标是显式的预测类别的边界，通过规则将attention-pooling CAM的结果进行过滤，得到少量的标签正样本和较多的负样本以及无关的标签(不参与训练)。</p>
-<ul>
-<li>构造一个网络用于预测物体边界，属于边界二分类网络。训练数据使用从CAM合成得到的标签数据，损失函数方面由于样本的不均衡性所以做了归一化。如下<script type="math/tex; mode=display">L_{B}=-\sum_{i \in \Phi_{b r y}} \frac{W_{i} \log \left(P_{i}\right)}{\left|\Phi_{b r y}\right|}-\frac{1}{2}\left(\sum_{i \in \Phi_{c}} \frac{\log \left(1-P_{i}\right)}{\left|\Phi_{c}\right|}+\sum_{i \in \Phi_{b g}} \frac{\log \left(1-P_{i}\right)}{\left|\Phi_{b g}\right|}\right)</script></li>
-<li>通过训练更多的类别边界得到挖掘，之后使用IRNet文章的工作，将边界图转换为亲和度矩阵，计算每个位置与其邻近像素之间的亲和度关系，作为概率转移矩阵，模拟随机游走扩散，对CAM的结果进行优化。</li>
-</ul>
-<p>经过优化之后，segmentation的结果就比较不错了，之后使用类似retrain的思路，将生成的语义分割结果和原图以全监督的方式训练deeplab模型，以得到最终的结果。</p>
+<h3 id="Main-Result"><a href="#Main-Result" class="headerlink" title="Main Result"></a>Main Result</h3><p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/4.png" alt></p>
+<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/5.png" alt></p>
 
       
     </div>
@@ -388,9 +428,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%BC%B1%E7%9B%91%E7%9D%A3/" rel="tag"># 弱监督</a>
-          
-            <a href="/tags/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/" rel="tag"># 语义分割</a>
+            <a href="/tags/frame-seclection/" rel="tag"># frame seclection</a>
           
         </div>
       
@@ -403,8 +441,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/07/21/Improving-Law-Enforcement-Daily-Deployment-Through-Machine-Learning-Informed-Optimization-under-Uncertainty/" rel="next" title="Improving Law Enforcement Daily Deployment Through Machine Learning-Informed Optimization under Uncertainty">
-                <i class="fa fa-chevron-left"></i> Improving Law Enforcement Daily Deployment Through Machine Learning-Informed Optimization under Uncertainty
+              <a href="/2020/08/11/Tagoram-Real-Time-Tracking-of-Mobile-RFID-Tags-to-High-Precision-Using-COTS-Devices/" rel="next" title="Tagoram: Real-Time Tracking of Mobile RFID Tags to High Precision Using COTS Devices">
+                <i class="fa fa-chevron-left"></i> Tagoram: Real-Time Tracking of Mobile RFID Tags to High Precision Using COTS Devices
               </a>
             
           </div>
@@ -412,10 +450,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/08/11/Tagoram-Real-Time-Tracking-of-Mobile-RFID-Tags-to-High-Precision-Using-COTS-Devices/" rel="prev" title="Tagoram: Real-Time Tracking of Mobile RFID Tags to High Precision Using COTS Devices">
-                Tagoram: Real-Time Tracking of Mobile RFID Tags to High Precision Using COTS Devices <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -547,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-问题定位"><span class="nav-number">1.</span> <span class="nav-text">1 问题定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-相关工作"><span class="nav-number">2.</span> <span class="nav-text">2 相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-文章工作"><span class="nav-number">3.</span> <span class="nav-text">3 文章工作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduce"><span class="nav-number">1.</span> <span class="nav-text">1 Introduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Approach"><span class="nav-number">2.</span> <span class="nav-text">2 Approach</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Memory-agumented-LSTM"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Memory-agumented LSTM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Global-memory"><span class="nav-number">2.1.1.</span> <span class="nav-text">Global memory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reward-function"><span class="nav-number">2.1.2.</span> <span class="nav-text">Reward function</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Selection-network"><span class="nav-number">2.1.3.</span> <span class="nav-text">Selection network</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Utility-network"><span class="nav-number">2.1.4.</span> <span class="nav-text">Utility network</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Optimization"><span class="nav-number">2.1.5.</span> <span class="nav-text">Optimization</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Adaptive-Lookahead-Inference"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Adaptive Lookahead Inference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Experiment"><span class="nav-number">3.</span> <span class="nav-text">3 Experiment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dataset"><span class="nav-number">3.1.</span> <span class="nav-text">Dataset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Main-Result"><span class="nav-number">3.2.</span> <span class="nav-text">Main Result</span></a></li></ol></li></ol></div>
             
 
           </div>
