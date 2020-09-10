@@ -258,6 +258,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/" itemprop="url">Learning RoI Transformer for Detecting Oriented Objects in Aerial Images</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-10T13:22:00+08:00">
+                2020-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-问题定义"><a href="#1-问题定义" class="headerlink" title="1.问题定义"></a>1.问题定义</h2><p>目标检测是计算机视觉领域的一个基本问题, 其目标是在场景中快速、精确地定位、识别特定目标，从而为很多计算机视觉应用场景提供重要的信息基础。近年来，该领域随着深度学习技术的快速发展取得了显著的突破，然而由于俯瞰视角、高度复杂的背景以及物体多样的外观，航拍图像中的物体检测是计算机视觉中一项具有挑战性的任务。特别是当在航拍图像中检测密集的物体时，依赖于水平候选框（Horizontal Region of Interest ，HRoI)的普通目标检测的方法经常引入候选框和物体之间的不匹配，并最终导致物体分类和定位的误差。</p>
+<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2.相关工作"></a>2.相关工作</h2><p>由于基于HRoI的方法总是从水平的特征图中提取特征并进行边框回归，因此对于旋转的物体并不能达到很好的精度。在此之前也有一些方法使用Rotated anchor 来解决这个问题，但是它们的设计总是使 anchor 的数量倍增并且显著增加了计算复杂性。</p>
+<h2 id="3-本文工作"><a href="#3-本文工作" class="headerlink" title="3.本文工作"></a>3.本文工作</h2><p>本文针对旋转的物体仍然使用Horizontal anchors，在有有向边界框标注的前提下，提出新的方法 RoI Transformer。核心思想是先生成HRoI,再利用空间特征信息学习到偏转角度参数，最后作相应的调整以达到旋转不变性，同时解决了大量的anchor设计以及特征不匹配的问题。</p>
+<p>本文基于 Light Head R-CNN 进行改进，提出了两个新的模块：</p>
+<ul>
+<li><p>RRoI Learner ：此模块会将 HRoI 传递给 PS RoI Align 层， 再接一个轻量的维度为5的全连接层，回归 Rotated Ground Truths 相对于HRoIs的偏移, 通过解码器将 HRoI 和偏移量作为输入并输出的 RRoI:</p>
+<script type="math/tex; mode=display">
+  (t_x,t_y,t_w,t_h,t_\theta）</script></li>
+<li><p>RRoI Transformer：经过RRoI Learner学习到了旋转参数后，我么在这里就能扭曲特征图以保持深度特征的旋转不变性。RRoI Learner 和 RRoI 变形的组合构成了 RoI Transformer ，然后使用来自 RoI Transformer 的几何鲁棒合并的特征进行 RRoI 的分类和回归。</p>
+</li>
+</ul>
+<p><img src="/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/architecture.png" alt></p>
+<p>由于我们想要实现物体的旋转不变性特征，而通用检测的损失函数在这里就会出现问题了，在不同角度的情况下，两个旋转幅度相同的RRoI和RGT却会出现不同的横纵坐标偏移量。于是作者基于局部坐标系，对损失函数进行了修改：</p>
+<script type="math/tex; mode=display">
+t^*_x=1/w_r((x^*-x_r)cos\theta_r+(y^*-y_r)sin\theta_r),</script><script type="math/tex; mode=display">
+t^*_y=1/h_r((y^*-y_r)cos\theta_r-(x^*-x_r)sin\theta_r),</script><script type="math/tex; mode=display">
+t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满足物体相对偏移的旋转不变性来实现了物体特征的旋转不变性，并学习到旋转角度。</p>
+<p>本文通过 RoI Transformer 模块模拟几何变换并解决区域特征和物体的不匹配问题，为具有挑战性的 DOTA 和 HRSC 数据集的旋转物体检测带来了显著的改进。对于旋转物体，在有有向边界框标注的情况下， RoI Transformer模块更为合理。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1352,7 +1511,7 @@ c x+k, & x>0
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1374,7 +1533,7 @@ c x+k, & x>0
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
