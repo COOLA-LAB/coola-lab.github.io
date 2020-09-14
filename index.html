@@ -258,6 +258,190 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/" itemprop="url">Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-13T19:00:00+08:00">
+                2020-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇论文提出了一种叫做“动态风险密度”（Dynamic Risk Density）的方法，用于解决在没有目标检测的杂乱环境下进行导航的问题。</p>
+<h2 id="1-Previous-work"><a href="#1-Previous-work" class="headerlink" title="1. Previous work"></a>1. Previous work</h2><p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/1.jpg" style="zoom:33%;"></p>
+<p>在 Navigating Congested Environments with Risk Level Sets 这篇论文中，作者提出了占据风险代价函数：</p>
+<script type="math/tex; mode=display">H(q,x,\dot{x})=\sum^{n}_{i=1}{\frac{\exp(-(q-x_i)^T\Omega(q-x_i))}{1+\exp(-\alpha\dot{x_i}^T(q-x_i))}},\Omega=diag\{\frac{1}{\sigma^2_x},\frac{1}{\sigma^2_y}\} \tag{1}</script><p>其中，</p>
+<ul>
+<li>$q$：表示二维平面内的任意一个点；</li>
+<li>$x$：表示二维平面内所有障碍物的位置，例如图(a)中的四个点；</li>
+<li>$\dot{x}$：表示二维平面内所有障碍物的速度，例如图(a)中四个点上的箭头。</li>
+</ul>
+<p>通过计算 $H$，我们可以得到平面内每个点的占据风险代价，可以将其看成是该点在下一个时刻会出现障碍物的概率。在导航的过程中，为了不发生碰撞，自然要避免经过 $H$ 值大的点。</p>
+<p>$H$ 是由一个高斯峰 $\exp(-(q-x_i)^T\Omega(q-x_i))$ 乘上一个 logistic 函数 $\frac{1}{1+\exp(-\alpha\dot{x_i}^T(q-x_i))}$ 构成。很显然，离障碍物越近的点 $H$ 值会越大，这由高斯峰来进行描述，logistic 函数则是对这个高斯峰在速度方向上进行了偏移，如图(b)所示。</p>
+<p>在导航的过程中，给定一个阈值 $H_p$，只要确保只在 $H\leq H_p$ 的区域内行动就能避免发生碰撞。</p>
+<h2 id="2-Main-Idea"><a href="#2-Main-Idea" class="headerlink" title="2. Main Idea"></a>2. Main Idea</h2><p>在 Previous work 提到的方法中，我们假设已知了环境中所有障碍物的位置和速度，但在现实场景下，这往往是很难得到的。因此，在 Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection 这篇论文中，作者对其进行了改进，分别用“占据密度”(occupancy density)和“速度场”(velocity flow field)代替了障碍物的位置和速度。提出了动态风险密度：</p>
+<script type="math/tex; mode=display">H_\rho(q,t,\rho,V)=\frac{\rho(q,t)}{1+\exp(\alpha\nabla\rho(q,t)\cdot V(q,t))} \tag{2}</script><p>其中，</p>
+<ul>
+<li>$\rho$：表示占据密度；</li>
+<li>$V$：表示速度场。</li>
+</ul>
+<p>$H_\rho$ 和 $H$ 的意义类似。</p>
+<p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/2.jpg" style="zoom:33%;"></p>
+<p>通过仿真可以看出，由这两种方法得到的轮廓线非常相似（左图是计算 $H$ 值得到的，右图是计算 $H_\rho$ 值得到的）。</p>
+<h2 id="3-Approach"><a href="#3-Approach" class="headerlink" title="3. Approach"></a>3. Approach</h2><p>在这篇论文中，通过使用一个二维激光扫描仪来构建环境的占据网格而得到占据密度。</p>
+<p>对于如何计算速度场，论文中提出了两种方法，分别是基于<strong>聚类</strong>的方法和基于<strong>密度流</strong>的方法。</p>
+<h3 id="3-1-Velocity-Field-Estimation-from-Density-Flow"><a href="#3-1-Velocity-Field-Estimation-from-Density-Flow" class="headerlink" title="3.1 Velocity Field Estimation from Density Flow"></a>3.1 Velocity Field Estimation from Density Flow</h3><p>基于聚类的方法，使用 k-means 算法对占据网格进行聚类，并计算聚类中心的速度，再通过 Voronoi 分布将聚类中心的速度映射到所有的点上。</p>
+<p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/3.jpg" style="zoom:33%;"></p>
+<h3 id="3-2-Velocity-Field-Estimation-from-Density-Flow"><a href="#3-2-Velocity-Field-Estimation-from-Density-Flow" class="headerlink" title="3.2 Velocity Field Estimation from Density Flow"></a>3.2 Velocity Field Estimation from Density Flow</h3><p>基于密度流的方法与计算机视觉中的光流法类似。</p>
+<p>在这里引入了两个假设：</p>
+<ol>
+<li>密度不变性，即同一个点在经过 $\Delta t$ 时间移动了 $\Delta x$， $\Delta y$ 之后，密度没有发生改变：</li>
+</ol>
+<script type="math/tex; mode=display">\rho^t(x,y)=\rho(x,y,t)=\rho(x+\Delta x,y+\Delta y,t+\Delta t) \tag{3}</script><ol>
+<li>对于 $\rho(x+\Delta x,y+\Delta y,t+\Delta t)$ 可以进行一阶泰勒展开：</li>
+</ol>
+<script type="math/tex; mode=display">\rho(x+\Delta x,y+\Delta y,t+\Delta t)=\rho(x,y,t)+\frac{\partial\rho}{\partial x}\Delta x+\frac{\partial\rho}{\partial y}\Delta y+\frac{\partial\rho}{\partial t}\Delta t+H.O.T. \tag{4}</script><p>结合(3)(4)可以得到：</p>
+<script type="math/tex; mode=display">\frac{\partial\rho}{\partial x}\frac{\Delta x}{\Delta t} +\frac{\partial\rho}{\partial y}\frac{\Delta y}{\Delta t}+\frac{\partial\rho}{\partial t}=0 \tag{5}</script><p>对(5)进行变量替换：</p>
+<script type="math/tex; mode=display">u=\frac{\Delta x}{\Delta t},v=\frac{\Delta y}{\Delta t}</script><script type="math/tex; mode=display">I_x=\frac{\partial\rho}{\partial x},I_y=\frac{\partial\rho}{\partial y},I_t=\frac{\partial\rho}{\partial t}</script><p>化简可得：</p>
+<script type="math/tex; mode=display">\left[\begin{matrix} I_x&I_y \end{matrix}\right] \left[\begin{matrix} u\\v \end{matrix}\right] = -I_t \tag{6}</script><p>这是一个二元一次方程，无法进行求解，因此，必须引入额外的约束来计算 u,v。我们假设某一个窗口内的点具有相同的运动。</p>
+<p>考虑一个大小为 $w*w$ 大小的窗口，它含有 $w^2$ 数量的像素。由于该窗口内像素具有 同样的运动，因此我们共有 $w^2$ 个方程： </p>
+<script type="math/tex; mode=display">\left[\begin{matrix} I_x&I_y \end{matrix}\right]_k \left[\begin{matrix} u\\v \end{matrix}\right] = -I_{tk}, k=1,2,...,w^2 \tag{7}</script><p>记：</p>
+<script type="math/tex; mode=display">A=\left[\begin{matrix}[I_x,I_y]_1\\ \vdots\\ [I_x,I_y]_k\end{matrix}\right],b=\left[\begin{matrix}I_{t1}\\ \vdots\\ I_{tk}\end{matrix}\right]</script><p>于是整个方程为：</p>
+<script type="math/tex; mode=display">A\left[\begin{matrix}u\\v\end{matrix}\right]=-b \tag{8}</script><p>利用最小二乘法可以求得：</p>
+<script type="math/tex; mode=display">\left[\begin{matrix}u\\v\end{matrix}\right]^*=-(A^TA)^{-1}A^Tb \tag{9}</script><h3 id="3-3-Navigation-Algorithm"><a href="#3-3-Navigation-Algorithm" class="headerlink" title="3.3 Navigation Algorithm"></a>3.3 Navigation Algorithm</h3><p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/4.jpg" style="zoom:33%;"></p>
+<p>Experiment：<a href="https://www.youtube.com/watch?v=uXry23LxpWw" target="_blank" rel="noopener">https://www.youtube.com/watch?v=uXry23LxpWw</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1511,7 +1695,7 @@ c x+k, & x>0
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1533,7 +1717,7 @@ c x+k, & x>0
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

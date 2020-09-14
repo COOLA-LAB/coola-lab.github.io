@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="弱监督,语义分割," />
+  <meta name="keywords" content="动态风险密度,自主导航," />
 
 
 
@@ -79,18 +79,23 @@
 
 
 
-<meta name="description" content="1 问题定位语义分割作为经典的计算机视觉的问题，从15年的FCN到之后的deeplab等，语义分割模型在自动驾驶，场景理解等场景都有较多的应该场景，同时也对神经网络的解释性产生一定的促进作用。对于输入的RGB图像或者灰度图，模型需要能够输出特定类别的区域，对于未设置的类别均作为背景处理。但是经典的语义分割模型都是使用像素级别的标签做监督，而这种标签在标注时非常耗时耗力，因为大家开始尝试使用弱监督(">
+<meta name="description" content="这篇论文提出了一种叫做“动态风险密度”（Dynamic Risk Density）的方法，用于解决在没有目标检测的杂乱环境下进行导航的问题。 1. Previous work 在 Navigating Congested Environments with Risk Level Sets 这篇论文中，作者提出了占据风险代价函数： H(q,x,\dot{x})&#x3D;\sum^{n}_{i&#x3D;1}{\fra">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Weakly Supervised Semantic Segmentation with Boundary Exploration">
-<meta property="og:url" content="http://yoursite.com/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/index.html">
+<meta property="og:title" content="Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection">
+<meta property="og:url" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/index.html">
 <meta property="og:site_name" content="COOLA-LAB">
-<meta property="og:description" content="1 问题定位语义分割作为经典的计算机视觉的问题，从15年的FCN到之后的deeplab等，语义分割模型在自动驾驶，场景理解等场景都有较多的应该场景，同时也对神经网络的解释性产生一定的促进作用。对于输入的RGB图像或者灰度图，模型需要能够输出特定类别的区域，对于未设置的类别均作为背景处理。但是经典的语义分割模型都是使用像素级别的标签做监督，而这种标签在标注时非常耗时耗力，因为大家开始尝试使用弱监督(">
-<meta property="article:published_time" content="2020-08-03T11:57:08.000Z">
-<meta property="article:modified_time" content="2020-08-19T02:08:51.401Z">
+<meta property="og:description" content="这篇论文提出了一种叫做“动态风险密度”（Dynamic Risk Density）的方法，用于解决在没有目标检测的杂乱环境下进行导航的问题。 1. Previous work 在 Navigating Congested Environments with Risk Level Sets 这篇论文中，作者提出了占据风险代价函数： H(q,x,\dot{x})&#x3D;\sum^{n}_{i&#x3D;1}{\fra">
+<meta property="og:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/2.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/3.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/4.jpg">
+<meta property="article:published_time" content="2020-09-13T11:00:00.000Z">
+<meta property="article:modified_time" content="2020-09-14T00:18:00.689Z">
 <meta property="article:author" content="COOLA-LAB">
-<meta property="article:tag" content="弱监督">
-<meta property="article:tag" content="语义分割">
+<meta property="article:tag" content="动态风险密度">
+<meta property="article:tag" content="自主导航">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/1.jpg">
 
 
 
@@ -120,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/"/>
 
 
 
 
 
-  <title>Weakly Supervised Semantic Segmentation with Boundary Exploration | COOLA-LAB</title>
+  <title>Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection | COOLA-LAB</title>
   
 
 
@@ -263,7 +268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="COOLA-LAB">
@@ -280,7 +285,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Weakly Supervised Semantic Segmentation with Boundary Exploration</h1>
+          <h1 class="post-title" itemprop="name headline">Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection</h1>
         
 
         <div class="post-meta">
@@ -292,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-03T19:57:08+08:00">
-                2020-08-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-13T19:00:00+08:00">
+                2020-09-13
               </time>
             
 
@@ -352,25 +357,49 @@
       
 
       
-        <h2 id="1-问题定位"><a href="#1-问题定位" class="headerlink" title="1 问题定位"></a>1 问题定位</h2><p>语义分割作为经典的计算机视觉的问题，从15年的FCN到之后的deeplab等，语义分割模型在自动驾驶，场景理解等场景都有较多的应该场景，同时也对神经网络的解释性产生一定的促进作用。对于输入的RGB图像或者灰度图，模型需要能够输出特定类别的区域，对于未设置的类别均作为背景处理。但是经典的语义分割模型都是使用像素级别的标签做监督，而这种标签在标注时非常耗时耗力，因为大家开始尝试使用弱监督(低于像素级别的监督)来完成语义分割任务，常见的弱监督包括：bounding box / scribble / image-level，本文也是基于image-level，图像级别的标签作为监督。该监督最为常见且监督级别最低，难度也较大。</p>
-<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2 相关工作"></a>2 相关工作</h2><p>大部分文章的解决思路是使用localization技术获取物体的初始位置信息，之后通过策略将初始定位结果进行优化。可以视为两阶段的localization-coarse。<br>localization方面，经典的技术包括saliency detection和CAM:</p>
+        <p>这篇论文提出了一种叫做“动态风险密度”（Dynamic Risk Density）的方法，用于解决在没有目标检测的杂乱环境下进行导航的问题。</p>
+<h2 id="1-Previous-work"><a href="#1-Previous-work" class="headerlink" title="1. Previous work"></a>1. Previous work</h2><p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/1.jpg" style="zoom:33%;"></p>
+<p>在 Navigating Congested Environments with Risk Level Sets 这篇论文中，作者提出了占据风险代价函数：</p>
+<script type="math/tex; mode=display">H(q,x,\dot{x})=\sum^{n}_{i=1}{\frac{\exp(-(q-x_i)^T\Omega(q-x_i))}{1+\exp(-\alpha\dot{x_i}^T(q-x_i))}},\Omega=diag\{\frac{1}{\sigma^2_x},\frac{1}{\sigma^2_y}\} \tag{1}</script><p>其中，</p>
 <ul>
-<li>CAM是使用全卷积网络提取特征，之后使用20个1x1的卷积核过滤，在将20张特征图通过GAP转换为20个标量值，使用多标签损失函数训练之后，20张特征图就对应20个类别的激活图。</li>
-<li>saliency map是将分类模型的梯度反向传播回原图得到高激活值的区域即对应类别的位置。在反向传播的过程中，如果一个节点正向传播时没有激活，那么该节点不进行反向传播的梯度传递。<br>  coarse方面:</li>
-<li>实现思路各式各样，不过主要要解决的问题是localization的定位面积过小，所以很多工作聚焦在鼓励类别区域扩撒，同时扩散的过程中保持边界性(由CRF完成)。</li>
+<li>$q$：表示二维平面内的任意一个点；</li>
+<li>$x$：表示二维平面内所有障碍物的位置，例如图(a)中的四个点；</li>
+<li>$\dot{x}$：表示二维平面内所有障碍物的速度，例如图(a)中四个点上的箭头。</li>
 </ul>
-<h2 id="3-文章工作"><a href="#3-文章工作" class="headerlink" title="3 文章工作"></a>3 文章工作</h2><p>对于CAM进行了改进，提出了attention-pooling CAM。</p>
+<p>通过计算 $H$，我们可以得到平面内每个点的占据风险代价，可以将其看成是该点在下一个时刻会出现障碍物的概率。在导航的过程中，为了不发生碰撞，自然要避免经过 $H$ 值大的点。</p>
+<p>$H$ 是由一个高斯峰 $\exp(-(q-x_i)^T\Omega(q-x_i))$ 乘上一个 logistic 函数 $\frac{1}{1+\exp(-\alpha\dot{x_i}^T(q-x_i))}$ 构成。很显然，离障碍物越近的点 $H$ 值会越大，这由高斯峰来进行描述，logistic 函数则是对这个高斯峰在速度方向上进行了偏移，如图(b)所示。</p>
+<p>在导航的过程中，给定一个阈值 $H_p$，只要确保只在 $H\leq H_p$ 的区域内行动就能避免发生碰撞。</p>
+<h2 id="2-Main-Idea"><a href="#2-Main-Idea" class="headerlink" title="2. Main Idea"></a>2. Main Idea</h2><p>在 Previous work 提到的方法中，我们假设已知了环境中所有障碍物的位置和速度，但在现实场景下，这往往是很难得到的。因此，在 Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection 这篇论文中，作者对其进行了改进，分别用“占据密度”(occupancy density)和“速度场”(velocity flow field)代替了障碍物的位置和速度。提出了动态风险密度：</p>
+<script type="math/tex; mode=display">H_\rho(q,t,\rho,V)=\frac{\rho(q,t)}{1+\exp(\alpha\nabla\rho(q,t)\cdot V(q,t))} \tag{2}</script><p>其中，</p>
 <ul>
-<li>全卷积网络之后得到20张特征图$F_c$，对于每张$F_c$得各个位置，乘以参数$k$之后过一层softmax，得到attention map$A_c$。最终对应类别的置信度为特征图与attention map对应位置相乘后相加的值$P_c = \sum(F_c\times A_c)$</li>
-<li>在梯度更新的反向传播时，attention map部分的梯度不进行传递。</li>
-<li>训练收敛后的$F_c$即对应类别定位图。</li>
+<li>$\rho$：表示占据密度；</li>
+<li>$V$：表示速度场。</li>
 </ul>
-<p>对于优化部分，目标是显式的预测类别的边界，通过规则将attention-pooling CAM的结果进行过滤，得到少量的标签正样本和较多的负样本以及无关的标签(不参与训练)。</p>
-<ul>
-<li>构造一个网络用于预测物体边界，属于边界二分类网络。训练数据使用从CAM合成得到的标签数据，损失函数方面由于样本的不均衡性所以做了归一化。如下<script type="math/tex; mode=display">L_{B}=-\sum_{i \in \Phi_{b r y}} \frac{W_{i} \log \left(P_{i}\right)}{\left|\Phi_{b r y}\right|}-\frac{1}{2}\left(\sum_{i \in \Phi_{c}} \frac{\log \left(1-P_{i}\right)}{\left|\Phi_{c}\right|}+\sum_{i \in \Phi_{b g}} \frac{\log \left(1-P_{i}\right)}{\left|\Phi_{b g}\right|}\right)</script></li>
-<li>通过训练更多的类别边界得到挖掘，之后使用IRNet文章的工作，将边界图转换为亲和度矩阵，计算每个位置与其邻近像素之间的亲和度关系，作为概率转移矩阵，模拟随机游走扩散，对CAM的结果进行优化。</li>
-</ul>
-<p>经过优化之后，segmentation的结果就比较不错了，之后使用类似retrain的思路，将生成的语义分割结果和原图以全监督的方式训练deeplab模型，以得到最终的结果。</p>
+<p>$H_\rho$ 和 $H$ 的意义类似。</p>
+<p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/2.jpg" style="zoom:33%;"></p>
+<p>通过仿真可以看出，由这两种方法得到的轮廓线非常相似（左图是计算 $H$ 值得到的，右图是计算 $H_\rho$ 值得到的）。</p>
+<h2 id="3-Approach"><a href="#3-Approach" class="headerlink" title="3. Approach"></a>3. Approach</h2><p>在这篇论文中，通过使用一个二维激光扫描仪来构建环境的占据网格而得到占据密度。</p>
+<p>对于如何计算速度场，论文中提出了两种方法，分别是基于<strong>聚类</strong>的方法和基于<strong>密度流</strong>的方法。</p>
+<h3 id="3-1-Velocity-Field-Estimation-from-Density-Flow"><a href="#3-1-Velocity-Field-Estimation-from-Density-Flow" class="headerlink" title="3.1 Velocity Field Estimation from Density Flow"></a>3.1 Velocity Field Estimation from Density Flow</h3><p>基于聚类的方法，使用 k-means 算法对占据网格进行聚类，并计算聚类中心的速度，再通过 Voronoi 分布将聚类中心的速度映射到所有的点上。</p>
+<p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/3.jpg" style="zoom:33%;"></p>
+<h3 id="3-2-Velocity-Field-Estimation-from-Density-Flow"><a href="#3-2-Velocity-Field-Estimation-from-Density-Flow" class="headerlink" title="3.2 Velocity Field Estimation from Density Flow"></a>3.2 Velocity Field Estimation from Density Flow</h3><p>基于密度流的方法与计算机视觉中的光流法类似。</p>
+<p>在这里引入了两个假设：</p>
+<ol>
+<li>密度不变性，即同一个点在经过 $\Delta t$ 时间移动了 $\Delta x$， $\Delta y$ 之后，密度没有发生改变：</li>
+</ol>
+<script type="math/tex; mode=display">\rho^t(x,y)=\rho(x,y,t)=\rho(x+\Delta x,y+\Delta y,t+\Delta t) \tag{3}</script><ol>
+<li>对于 $\rho(x+\Delta x,y+\Delta y,t+\Delta t)$ 可以进行一阶泰勒展开：</li>
+</ol>
+<script type="math/tex; mode=display">\rho(x+\Delta x,y+\Delta y,t+\Delta t)=\rho(x,y,t)+\frac{\partial\rho}{\partial x}\Delta x+\frac{\partial\rho}{\partial y}\Delta y+\frac{\partial\rho}{\partial t}\Delta t+H.O.T. \tag{4}</script><p>结合(3)(4)可以得到：</p>
+<script type="math/tex; mode=display">\frac{\partial\rho}{\partial x}\frac{\Delta x}{\Delta t} +\frac{\partial\rho}{\partial y}\frac{\Delta y}{\Delta t}+\frac{\partial\rho}{\partial t}=0 \tag{5}</script><p>对(5)进行变量替换：</p>
+<script type="math/tex; mode=display">u=\frac{\Delta x}{\Delta t},v=\frac{\Delta y}{\Delta t}</script><script type="math/tex; mode=display">I_x=\frac{\partial\rho}{\partial x},I_y=\frac{\partial\rho}{\partial y},I_t=\frac{\partial\rho}{\partial t}</script><p>化简可得：</p>
+<script type="math/tex; mode=display">\left[\begin{matrix} I_x&I_y \end{matrix}\right] \left[\begin{matrix} u\\v \end{matrix}\right] = -I_t \tag{6}</script><p>这是一个二元一次方程，无法进行求解，因此，必须引入额外的约束来计算 u,v。我们假设某一个窗口内的点具有相同的运动。</p>
+<p>考虑一个大小为 $w*w$ 大小的窗口，它含有 $w^2$ 数量的像素。由于该窗口内像素具有 同样的运动，因此我们共有 $w^2$ 个方程： </p>
+<script type="math/tex; mode=display">\left[\begin{matrix} I_x&I_y \end{matrix}\right]_k \left[\begin{matrix} u\\v \end{matrix}\right] = -I_{tk}, k=1,2,...,w^2 \tag{7}</script><p>记：</p>
+<script type="math/tex; mode=display">A=\left[\begin{matrix}[I_x,I_y]_1\\ \vdots\\ [I_x,I_y]_k\end{matrix}\right],b=\left[\begin{matrix}I_{t1}\\ \vdots\\ I_{tk}\end{matrix}\right]</script><p>于是整个方程为：</p>
+<script type="math/tex; mode=display">A\left[\begin{matrix}u\\v\end{matrix}\right]=-b \tag{8}</script><p>利用最小二乘法可以求得：</p>
+<script type="math/tex; mode=display">\left[\begin{matrix}u\\v\end{matrix}\right]^*=-(A^TA)^{-1}A^Tb \tag{9}</script><h3 id="3-3-Navigation-Algorithm"><a href="#3-3-Navigation-Algorithm" class="headerlink" title="3.3 Navigation Algorithm"></a>3.3 Navigation Algorithm</h3><p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/4.jpg" style="zoom:33%;"></p>
+<p>Experiment：<a href="https://www.youtube.com/watch?v=uXry23LxpWw" target="_blank" rel="noopener">https://www.youtube.com/watch?v=uXry23LxpWw</a></p>
 
       
     </div>
@@ -388,9 +417,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%BC%B1%E7%9B%91%E7%9D%A3/" rel="tag"># 弱监督</a>
+            <a href="/tags/%E5%8A%A8%E6%80%81%E9%A3%8E%E9%99%A9%E5%AF%86%E5%BA%A6/" rel="tag"># 动态风险密度</a>
           
-            <a href="/tags/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/" rel="tag"># 语义分割</a>
+            <a href="/tags/%E8%87%AA%E4%B8%BB%E5%AF%BC%E8%88%AA/" rel="tag"># 自主导航</a>
           
         </div>
       
@@ -403,8 +432,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/07/21/Improving-Law-Enforcement-Daily-Deployment-Through-Machine-Learning-Informed-Optimization-under-Uncertainty/" rel="next" title="Improving Law Enforcement Daily Deployment Through Machine Learning-Informed Optimization under Uncertainty">
-                <i class="fa fa-chevron-left"></i> Improving Law Enforcement Daily Deployment Through Machine Learning-Informed Optimization under Uncertainty
+              <a href="/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/" rel="next" title="Learning RoI Transformer for Detecting Oriented Objects in Aerial Images">
+                <i class="fa fa-chevron-left"></i> Learning RoI Transformer for Detecting Oriented Objects in Aerial Images
               </a>
             
           </div>
@@ -412,10 +441,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/08/11/Tagoram-Real-Time-Tracking-of-Mobile-RFID-Tags-to-High-Precision-Using-COTS-Devices/" rel="prev" title="Tagoram: Real-Time Tracking of Mobile RFID Tags to High Precision Using COTS Devices">
-                Tagoram: Real-Time Tracking of Mobile RFID Tags to High Precision Using COTS Devices <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -547,7 +572,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-问题定位"><span class="nav-number">1.</span> <span class="nav-text">1 问题定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-相关工作"><span class="nav-number">2.</span> <span class="nav-text">2 相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-文章工作"><span class="nav-number">3.</span> <span class="nav-text">3 文章工作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Previous-work"><span class="nav-number">1.</span> <span class="nav-text">1. Previous work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Main-Idea"><span class="nav-number">2.</span> <span class="nav-text">2. Main Idea</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Approach"><span class="nav-number">3.</span> <span class="nav-text">3. Approach</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Velocity-Field-Estimation-from-Density-Flow"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Velocity Field Estimation from Density Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Velocity-Field-Estimation-from-Density-Flow"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Velocity Field Estimation from Density Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Navigation-Algorithm"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 Navigation Algorithm</span></a></li></ol></li></ol></div>
             
 
           </div>
