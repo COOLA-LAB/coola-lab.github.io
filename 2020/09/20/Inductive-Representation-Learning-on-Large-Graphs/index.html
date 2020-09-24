@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="目标检测,遥感图像," />
+  <meta name="keywords" content="表征学习,图网络," />
 
 
 
@@ -79,20 +79,21 @@
 
 
 
-<meta name="description" content="1.问题定义目标检测是计算机视觉领域的一个基本问题, 其目标是在场景中快速、精确地定位、识别特定目标，从而为很多计算机视觉应用场景提供重要的信息基础。近年来，该领域随着深度学习技术的快速发展取得了显著的突破，然而由于俯瞰视角、高度复杂的背景以及物体多样的外观，航拍图像中的物体检测是计算机视觉中一项具有挑战性的任务。特别是当在航拍图像中检测密集的物体时，依赖于水平候选框（Horizontal Reg">
+<meta name="description" content="1 问题定位在大规模graph上学到的节点低维embedding，在很多预测任务中非常有用，如内容推荐、节点分类等 。但是现在大多数方法都是transductive（直推式）学习， 不能直接泛化到未知节点。这些方法是在一个固定的graph上直接学习每个节点的embedding，但是大多情况graph是会演化的，当网络结构改变以及新节点的出现，直推式学习需要重新训练，很难落地在需要快速生成unsee">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Learning RoI Transformer for Detecting Oriented Objects in Aerial Images">
-<meta property="og:url" content="http://yoursite.com/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/index.html">
+<meta property="og:title" content="Inductive Representation Learning on Large Graphs">
+<meta property="og:url" content="http://yoursite.com/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/index.html">
 <meta property="og:site_name" content="COOLA-LAB">
-<meta property="og:description" content="1.问题定义目标检测是计算机视觉领域的一个基本问题, 其目标是在场景中快速、精确地定位、识别特定目标，从而为很多计算机视觉应用场景提供重要的信息基础。近年来，该领域随着深度学习技术的快速发展取得了显著的突破，然而由于俯瞰视角、高度复杂的背景以及物体多样的外观，航拍图像中的物体检测是计算机视觉中一项具有挑战性的任务。特别是当在航拍图像中检测密集的物体时，依赖于水平候选框（Horizontal Reg">
-<meta property="og:image" content="http://yoursite.com/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/architecture.png">
-<meta property="article:published_time" content="2020-09-10T05:22:00.000Z">
-<meta property="article:modified_time" content="2020-09-10T05:36:05.321Z">
+<meta property="og:description" content="1 问题定位在大规模graph上学到的节点低维embedding，在很多预测任务中非常有用，如内容推荐、节点分类等 。但是现在大多数方法都是transductive（直推式）学习， 不能直接泛化到未知节点。这些方法是在一个固定的graph上直接学习每个节点的embedding，但是大多情况graph是会演化的，当网络结构改变以及新节点的出现，直推式学习需要重新训练，很难落地在需要快速生成unsee">
+<meta property="og:image" content="http://yoursite.com/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/v2-7e94e024910274eee88ab3947fd3dff4_1440w.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/image-20200924141947029.png">
+<meta property="article:published_time" content="2020-09-20T09:30:08.000Z">
+<meta property="article:modified_time" content="2020-09-24T07:59:44.239Z">
 <meta property="article:author" content="COOLA-LAB">
-<meta property="article:tag" content="目标检测">
-<meta property="article:tag" content="遥感图像">
+<meta property="article:tag" content="表征学习">
+<meta property="article:tag" content="图网络">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/architecture.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/v2-7e94e024910274eee88ab3947fd3dff4_1440w.jpg">
 
 
 
@@ -122,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/"/>
 
 
 
 
 
-  <title>Learning RoI Transformer for Detecting Oriented Objects in Aerial Images | COOLA-LAB</title>
+  <title>Inductive Representation Learning on Large Graphs | COOLA-LAB</title>
   
 
 
@@ -255,7 +256,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="COOLA-LAB">
@@ -272,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Learning RoI Transformer for Detecting Oriented Objects in Aerial Images</h1>
+          <h1 class="post-title" itemprop="name headline">Inductive Representation Learning on Large Graphs</h1>
         
 
         <div class="post-meta">
@@ -284,8 +285,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-10T13:22:00+08:00">
-                2020-09-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-20T17:30:08+08:00">
+                2020-09-20
               </time>
             
 
@@ -344,24 +345,39 @@
       
 
       
-        <h2 id="1-问题定义"><a href="#1-问题定义" class="headerlink" title="1.问题定义"></a>1.问题定义</h2><p>目标检测是计算机视觉领域的一个基本问题, 其目标是在场景中快速、精确地定位、识别特定目标，从而为很多计算机视觉应用场景提供重要的信息基础。近年来，该领域随着深度学习技术的快速发展取得了显著的突破，然而由于俯瞰视角、高度复杂的背景以及物体多样的外观，航拍图像中的物体检测是计算机视觉中一项具有挑战性的任务。特别是当在航拍图像中检测密集的物体时，依赖于水平候选框（Horizontal Region of Interest ，HRoI)的普通目标检测的方法经常引入候选框和物体之间的不匹配，并最终导致物体分类和定位的误差。</p>
-<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2.相关工作"></a>2.相关工作</h2><p>由于基于HRoI的方法总是从水平的特征图中提取特征并进行边框回归，因此对于旋转的物体并不能达到很好的精度。在此之前也有一些方法使用Rotated anchor 来解决这个问题，但是它们的设计总是使 anchor 的数量倍增并且显著增加了计算复杂性。</p>
-<h2 id="3-本文工作"><a href="#3-本文工作" class="headerlink" title="3.本文工作"></a>3.本文工作</h2><p>本文针对旋转的物体仍然使用Horizontal anchors，在有有向边界框标注的前提下，提出新的方法 RoI Transformer。核心思想是先生成HRoI,再利用空间特征信息学习到偏转角度参数，最后作相应的调整以达到旋转不变性，同时解决了大量的anchor设计以及特征不匹配的问题。</p>
-<p>本文基于 Light Head R-CNN 进行改进，提出了两个新的模块：</p>
-<ul>
-<li><p>RRoI Learner ：此模块会将 HRoI 传递给 PS RoI Align 层， 再接一个轻量的维度为5的全连接层，回归 Rotated Ground Truths 相对于HRoIs的偏移, 通过解码器将 HRoI 和偏移量作为输入并输出的 RRoI:</p>
-<script type="math/tex; mode=display">
-  (t_x,t_y,t_w,t_h,t_\theta）</script></li>
-<li><p>RRoI Transformer：经过RRoI Learner学习到了旋转参数后，我么在这里就能扭曲特征图以保持深度特征的旋转不变性。RRoI Learner 和 RRoI 变形的组合构成了 RoI Transformer ，然后使用来自 RoI Transformer 的几何鲁棒合并的特征进行 RRoI 的分类和回归。</p>
-</li>
+        <h2 id="1-问题定位"><a href="#1-问题定位" class="headerlink" title="1 问题定位"></a>1 问题定位</h2><p>在大规模graph上学到的节点<strong>低维embedding</strong>，在很多预测任务中非常有用，如内容推荐、节点分类等 。但是现在大多数方法都是transductive（直推式）学习， 不能直接泛化到未知节点。这些方法是在一个固定的graph上直接学习每个节点的embedding，但是大多情况graph是会演化的，当网络结构改变以及新节点的出现，直推式学习需要重新训练，很难落地在需要快速生成unseen节点embedding的机器学习系统上。本文<strong>提出inductive（归纳式）学习框架—GraphSAGE(Graph SAmple and aggreGatE)，通过训练多个聚合邻居节点特征的function，将GCN扩展成归纳学习任务，从而对unseen节点起到泛化作用</strong>。</p>
+<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2 相关工作"></a>2 相关工作</h2><p>大部分学习节点embedding的方法有以下三种：</p>
+<p>一、基于因子分解的embedding生成方法：近年来有许多使用随机游走统计和基于矩阵分解来生成节点低维embedding的方法，如基于spectral clustering（谱聚类）的方法以及PageRank算法。因为这些embedding算法直接为单个节点训练节点embedding，所以它们本质上是transductive的（即不能泛化到unseen节点），而且需要expensive的额外训练(例如，重新通过随机梯度下降)来对新节点进行预测。</p>
+<p>二、图上的监督学习：</p>
+<p>除了节点嵌入方法之外，还有大量关于对图结构数据进行监督学习的paper。这包括各种基于核的方法，其中图的特征向量是从不同的graph kernel中派生出来的。本文在概念上受到了这些算法的启发。然而，前面的这些方法试图对整个图(或子图)进行分类，而这篇paper的重点是为单个节点生成有用的embedding。</p>
+<p>三、图卷积网络：</p>
+<p>近年来，人们提出了几种用于图学习的卷积神经网络结构。这些方法中的大多数不能推广到大规模的图，或者是为图分类而设计的。然而，本文的方法与Kipf等人引入的图卷积网络(GCN)密切相关。原来的GCN算法是为transductive设置下的半监督学习而设计的，该算法要求在训练过程中全图Laplacian矩阵是已知的，本文可以看作是GCN框架对inductive设置的扩展。</p>
+<h2 id="3-文章工作"><a href="#3-文章工作" class="headerlink" title="3 文章工作"></a>3 文章工作</h2><p>本文提出GraphSAGE框架的核心是如何聚合节点邻居特征信息，本章先<strong>介绍GraphSAGE前向传播过程</strong>（生成节点embedding），<strong>不同的聚合函数</strong>设定；然后介绍<strong>无监督和有监督的损失函数</strong>以及<strong>参数学习。</strong></p>
+<h3 id="3-1-前向传播"><a href="#3-1-前向传播" class="headerlink" title="3.1 前向传播"></a>3.1 前向传播</h3><p><strong>a. 可视化例子：</strong>下图是GraphSAGE 生成目标节点（红色）embededing并供下游任务预测的过程：</p>
+<p><img src="/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/v2-7e94e024910274eee88ab3947fd3dff4_1440w.jpg" alt="image-20200924141919374"></p>
+<ol>
+<li>先对邻居随机采样，降低计算复杂度（图中一跳邻居采样数=3，二跳邻居采样数=5）</li>
+<li>生成目标节点emebedding：先聚合2跳邻居特征，生成一跳邻居embedding，再聚合一跳邻居embedding，生成目标节点embedding，从而获得二跳邻居信息。</li>
+<li>将embedding作为全连接层的输入，预测目标节点的标签。</li>
+</ol>
+<p><strong>b. 伪代码:</strong></p>
+<p><img src="/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/image-20200924141947029.png" alt="image-20200924141947029"></p>
+<p>4-5行是核心代码，介绍卷积层操作：聚合与节点v相连的邻居（采样）k-1层的embedding，得到第k层邻居聚合特征  $h^k_{N(v)}$，与节点v第k-1层embedding $h^{k-1}_v$拼接，并通过全连接层转换，得到节点v在第k层的embedding  $h^k_{v}$。</p>
+<h3 id="3-2-聚合函数"><a href="#3-2-聚合函数" class="headerlink" title="3.2 聚合函数"></a><strong>3.2 聚合函数</strong></h3><p>伪代码第5行可以使用不同聚合函数，本小节介绍五种满足排序不变量的聚合函数：平均、GCN归纳式、LSTM、pooling聚合器。（因为邻居没有顺序，聚合函数需要满足排序不变量的特性，即输入顺序不会影响函数结果）</p>
+<p><strong>a.平均聚合：</strong>先对邻居embedding中每个维度取平均，然后与目标节点embedding拼接后进行非线性转换。</p>
+<script type="math/tex; mode=display">h^k_{N(v)} = mean({h^{k-1}_u,u\in N(v)})</script><script type="math/tex; mode=display">h^k_v = \sigma(W^k . CONCAT(h^{k-1}_v,h^k_{N(u)}))</script><p><strong>b. 归纳式聚合：</strong>直接对目标节点和所有邻居emebdding中每个维度取平均（替换伪代码中第5、6行），后再非线性转换：</p>
+<script type="math/tex; mode=display">h^k_v = \sigma(W^k . mean(\{h^{k-1}_v\} \cup \{h^{k-1}_u,\forall u \in N(v)\}))</script><p><strong>c. LSTM聚合：</strong>LSTM函数不符合“排序不变量”的性质，需要先对邻居随机排序，然后将随机的邻居序列embedding  $\{x_t,t\in N(v)\}$作为LSTM输入。</p>
+<p><strong>d. Pooling聚合器:</strong>先对每个邻居节点上一层embedding进行非线性转换（等价单个全连接层，每一维度代表在某方面的表示（如信用情况）），再按维度应用 max/mean pooling，捕获邻居集上在某方面的突出的／综合的表现 以此表示目标节点embedding。</p>
+<script type="math/tex; mode=display">h^k_{N(v)} = max(\{\sigma(W_{pool}{h^k_{u_i}+b,\forall u_i\in N(v)})</script><script type="math/tex; mode=display">h^k_v = \sigma(W^k . CONCAT(h^{k-1}_v,h^k_{N(u)}))</script><h3 id="3-3-无监督和有监督损失设定"><a href="#3-3-无监督和有监督损失设定" class="headerlink" title="3.3 无监督和有监督损失设定"></a><strong>3.3 无监督和有监督损失设定</strong></h3><p>损失函数根据具体应用情况，可以使用<strong>基于图的无监督损失</strong>和<strong>有监督损失</strong>。</p>
+<p><strong>a. 基于图的无监督损失：</strong>希望节点u与“邻居”v的embedding也相似（对应公式第一项），而与“没有交集”的节点$v_n$不相似（对应公式第二项)。</p>
+<script type="math/tex; mode=display">J_G(z_u) = -log(\sigma(z^T_uz_v)) - Q.E_{v_n \sim P_n(v)}log(\sigma(-z^T_uz_{v_n}))</script><ul>
+<li>$z_u$为节点u通过GraphSAGE生成的embedding。</li>
+<li>节点v是节点u随机游走访达“邻居”。</li>
+<li>$v_n \sim P_n(u)$表示负采样：节点 $v_n$是从节点u的负采样分布 $P_n$ 采样的，Q为采样样本数。</li>
+<li>embedding之间相似度通过向量点积计算得到</li>
 </ul>
-<p><img src="/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/architecture.png" alt></p>
-<p>由于我们想要实现物体的旋转不变性特征，而通用检测的损失函数在这里就会出现问题了，在不同角度的情况下，两个旋转幅度相同的RRoI和RGT却会出现不同的横纵坐标偏移量。于是作者基于局部坐标系，对损失函数进行了修改：</p>
-<script type="math/tex; mode=display">
-t^*_x=1/w_r((x^*-x_r)cos\theta_r+(y^*-y_r)sin\theta_r),</script><script type="math/tex; mode=display">
-t^*_y=1/h_r((y^*-y_r)cos\theta_r-(x^*-x_r)sin\theta_r),</script><script type="math/tex; mode=display">
-t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满足物体相对偏移的旋转不变性来实现了物体特征的旋转不变性，并学习到旋转角度。</p>
-<p>本文通过 RoI Transformer 模块模拟几何变换并解决区域特征和物体的不匹配问题，为具有挑战性的 DOTA 和 HRSC 数据集的旋转物体检测带来了显著的改进。对于旋转物体，在有有向边界框标注的情况下， RoI Transformer模块更为合理。</p>
+<p><strong>b. 有监督损失：</strong>无监督损失函数的设定来学习节点embedding 可以供下游多个任务使用，若仅使用在特定某个任务上，则可以替代上述损失函数符合特定任务目标，如交叉熵。</p>
+<h3 id="3-4-参数学习"><a href="#3-4-参数学习" class="headerlink" title="3.4 参数学习"></a>3.4 参数学习</h3><p>通过前向传播得到节点u的embedding  $z_u$ ,然后梯度下降（实现使用Adam优化器） <strong>进行反向</strong>传播优化参数 $W^k$ 和聚合函数内参数。</p>
 
       
     </div>
@@ -379,9 +395,9 @@ t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满
       
         <div class="post-tags">
           
-            <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="tag"># 目标检测</a>
+            <a href="/tags/%E8%A1%A8%E5%BE%81%E5%AD%A6%E4%B9%A0/" rel="tag"># 表征学习</a>
           
-            <a href="/tags/%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F/" rel="tag"># 遥感图像</a>
+            <a href="/tags/%E5%9B%BE%E7%BD%91%E7%BB%9C/" rel="tag"># 图网络</a>
           
         </div>
       
@@ -394,8 +410,8 @@ t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/" rel="next" title="AdaFrame - Adaptive Frame Selection for Fast Video Recognition">
-                <i class="fa fa-chevron-left"></i> AdaFrame - Adaptive Frame Selection for Fast Video Recognition
+              <a href="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/" rel="next" title="Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection">
+                <i class="fa fa-chevron-left"></i> Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection
               </a>
             
           </div>
@@ -403,10 +419,6 @@ t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/" rel="prev" title="Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection">
-                Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -538,7 +550,7 @@ t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-问题定义"><span class="nav-number">1.</span> <span class="nav-text">1.问题定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-相关工作"><span class="nav-number">2.</span> <span class="nav-text">2.相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-本文工作"><span class="nav-number">3.</span> <span class="nav-text">3.本文工作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-问题定位"><span class="nav-number">1.</span> <span class="nav-text">1 问题定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-相关工作"><span class="nav-number">2.</span> <span class="nav-text">2 相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-文章工作"><span class="nav-number">3.</span> <span class="nav-text">3 文章工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-前向传播"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 前向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-聚合函数"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 聚合函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-无监督和有监督损失设定"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 无监督和有监督损失设定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-参数学习"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 参数学习</span></a></li></ol></li></ol></div>
             
 
           </div>
