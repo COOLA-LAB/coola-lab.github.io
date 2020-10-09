@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="单目深度估计,自监督学习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在自监督单目深度估计任务中，文章提出了一种改进的框架，通过增加几何约束和尺度一致性约束，解决动态场景下光度不一致等问题，并增强时间图像序列中的尺度一致性，提升了单目深度和相机自运动估计的结果。 1. Previous work单目深度估计是指通过机器人的单一摄像头获得的一帧或多帧图像来获取深度信息和机器人姿态的方法。在即使定位与地图构建（SLAM）和视觉里程计（VO）中广泛应用。传统的深度估计方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Self-Supervised Learning of Depth and Motion Under Photometric Inconsistency">
+<meta property="og:url" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/index.html">
+<meta property="og:site_name" content="COOLA-LAB">
+<meta property="og:description" content="在自监督单目深度估计任务中，文章提出了一种改进的框架，通过增加几何约束和尺度一致性约束，解决动态场景下光度不一致等问题，并增强时间图像序列中的尺度一致性，提升了单目深度和相机自运动估计的结果。 1. Previous work单目深度估计是指通过机器人的单一摄像头获得的一帧或多帧图像来获取深度信息和机器人姿态的方法。在即使定位与地图构建（SLAM）和视觉里程计（VO）中广泛应用。传统的深度估计方法">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/1.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/2.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/3.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/5.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/4.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/6.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/7.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/8.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/9.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/10.png">
+<meta property="article:published_time" content="2020-09-22T11:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-09T02:07:51.128Z">
+<meta property="article:author" content="COOLA-LAB">
+<meta property="article:tag" content="单目深度估计">
+<meta property="article:tag" content="自监督学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/"/>
+
+
+
+
+
+  <title>Self-Supervised Learning of Depth and Motion Under Photometric Inconsistency | COOLA-LAB</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">COOLA-LAB</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Self-Supervised Learning of Depth and Motion Under Photometric Inconsistency</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-22T19:00:00+08:00">
+                2020-09-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在自监督单目深度估计任务中，文章提出了一种改进的框架，通过增加几何约束和尺度一致性约束，解决动态场景下光度不一致等问题，并增强时间图像序列中的尺度一致性，提升了单目深度和相机自运动估计的结果。</p>
+<h2 id="1-Previous-work"><a href="#1-Previous-work" class="headerlink" title="1. Previous work"></a>1. Previous work</h2><p>单目深度估计是指通过机器人的单一摄像头获得的一帧或多帧图像来获取深度信息和机器人姿态的方法。在即使定位与地图构建（SLAM）和视觉里程计（VO）中广泛应用。传统的深度估计方法根据图像像素的特征点进行匹配，受噪声影响误差较大，2017年，Google在CVPR上发表论文Unsupervised Learning of Depth and Ego-motion from Video，提出了自监督学习框架，可以对连续的视频序列做单目深度和相机运动的估计任务。</p>
+<script type="math/tex; mode=display">
+p_s \sim K_s[R_{t\to s}|t_{t\to s}]D_t(p_t)K^{-1}_tp_t</script><p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/1.png" alt="1" style="zoom:50%;"></p>
+<p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/2.png" alt="2" style="zoom:50%;"></p>
+<p>这样的估计方法使用光度误差做自监督，存在一定的局限性：</p>
+<ul>
+<li>场景中存在移动物体、非漫反射表面和遮挡时，光度误差损失函数不适用</li>
+<li>在单目场景下，单张物体深度估计结果是基于单张图片的相对深度，在连续多帧的估计结果中存在尺度不一致问题</li>
+</ul>
+<h2 id="2-Main-Idea"><a href="#2-Main-Idea" class="headerlink" title="2. Main Idea"></a>2. Main Idea</h2><ul>
+<li><p>沿用原有的框架和光度一致性损失进行深度和姿态的无监督训练</p>
+</li>
+<li><p>利用相邻图像的稀疏特征匹配和对极几何约束，增强图像帧间的几何一致性</p>
+</li>
+<li><p>在相邻图像间增加深度一致性约束，减少深度图像估计结果中的噪声</p>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+L_{total}=\alpha L_{pixel}+(1-\alpha)L_{SSIM}+\beta L_{smooth}+\gamma_1L{epi}+\gamma_2L_{reproj}+\mu_1L_{depth}+\mu_2L_{multi}</script><h2 id="3-Approach"><a href="#3-Approach" class="headerlink" title="3. Approach"></a>3. Approach</h2><p>本论文利用了自监督单目深度估计的基本框架，并在此基础上进行了改进，在更复杂的场景下优化单目深度估计结果。框架由三部分构成，分别是深度和位姿估计网络（光度一致性误差）、对极几何一致性约束模块和深度一致性约束模块。</p>
+<p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/3.png" alt="3"></p>
+<h3 id="3-1-Photometric-consistency"><a href="#3-1-Photometric-consistency" class="headerlink" title="3.1 Photometric consistency"></a>3.1 Photometric consistency</h3><p>给定$N$帧连续的单目图像，无监督的深度和自运动估计问题在同时估计目标（中间帧）图像的深度图$D_t$和到$N-1$个源图像的相对姿势$T_{t \to s}=[R_{T \to S}|t_{t \to s}] \in SE(3)$。使用depth CNN和poseCNN进行训练。帧间重建的对应公式为：</p>
+<script type="math/tex; mode=display">
+p_s \sim K_s[R_{t\to s}|t_{t\to s}]D_t(p_t)K^{-1}_tp_t</script><p>利用帧间相机运动实现源图像（source）到目标图像（target）的重建，计算损失：</p>
+<script type="math/tex; mode=display">
+L_{pixel}=\frac {1}{|M|}\sum_{\forall p_t \in M}|\hat I^{(s)}_t(p_t|D_t,T_{t \to s})-I_t(p_t)|</script><p>在像素损失（pixel loss）的基础上增加结构相似性损失（SSIM loss）和边缘平滑损失（edge loss），光度一致性损失的计算公式如下：</p>
+<script type="math/tex; mode=display">
+L_{baseline}=\alpha L_{pixel}+(1-\alpha)L_{SSIM}+\beta L_{smooth}</script><h3 id="3-2-Epipolar-geometric-consistency"><a href="#3-2-Epipolar-geometric-consistency" class="headerlink" title="3.2 Epipolar geometric consistency"></a>3.2 Epipolar geometric consistency</h3><p>上述重建公式需要满足几个假设：</p>
+<ul>
+<li>建模场景是静态的，没有移动的对象</li>
+<li>场景中的表面是朗伯型的</li>
+<li>相邻视图之间不存在遮挡</li>
+</ul>
+<p>由于现实中的绝大多数场景会违背这些假设，所以使用光度一致性损失进行深度估计的结果存在一定的误差。为此，本文提出了一种通过将间接法几何信息注入直接学习的框架来解决此问题的新颖方法。与依赖于密集光度一致性的直接方法不同，视觉SLAM的间接方法基于稀疏的局部描述符，例如SIFT 和ORB 等。局部不变性受比例和光度变化的影响较小，且可以隐式地嵌入到学习框架中。</p>
+<p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/5.png" alt="5" style="zoom: 50%;"></p>
+<h4 id="3-2-1-Symmetric-epipolar-error"><a href="#3-2-1-Symmetric-epipolar-error" class="headerlink" title="3.2.1 Symmetric epipolar error"></a>3.2.1 Symmetric epipolar error</h4><p>对极几何约束：</p>
+<p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/4.png" alt="4" style="zoom: 25%;"></p>
+<script type="math/tex; mode=display">
+p_2^tK^{-T}t\times RK^{-1}p_1=0</script><p>令本质矩阵$E=t \times R$，$x_1=K^{-1}p_1$，$x_2=K^{-1}p_2$，则对极约束可以化简为：</p>
+<script type="math/tex; mode=display">
+x_2^TEx_1=0</script><p>在相机针孔模型中，目标图像和源图像之间的特征匹配$S_{t \harr s}={\{}p \harr p^{‘}{\}}$满足对极约束，其中$p$和$p^{‘}$是校准后的图像坐标。利用对极约束，对于相邻两帧图像中多对匹配的特征点$p$ ，$p^{‘}$，计算<strong>symmetric epipolar error</strong>：</p>
+<script type="math/tex; mode=display">
+L_{epi}(S|R,t)=\sum_{\forall (p,p^{'}) \in S}(\frac {p^{'T}Ep}{\sqrt{(Ep)^2_{(1)}+(Ep)^2_{(2)}}} + \frac {p^{T}Ep^{'}}{\sqrt {(Ep^{'})^2_{(1)}+(Ep^{'})^2_{(2)}}})</script><h4 id="3-2-2-Re-projection-error"><a href="#3-2-2-Re-projection-error" class="headerlink" title="3.2.2 Re-projection error"></a>3.2.2 Re-projection error</h4><p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/6.png" alt="6" style="zoom: 25%;"></p>
+<p>为了用特征匹配进行深度估计结果的优化，可使用估计的深度在一个图像中反投影2D特征以计算3D轨迹，然后将3D轨迹重新投影到另一幅图像以计算重新投影误差。由于特征点$p$的坐标不是整数，因此使用$\hat D_t(p)$在目标深度图像上进行双线性采样。</p>
+<script type="math/tex; mode=display">
+L_{reproj}(S|R,t,D_t)=\sum _{\forall p \harr p^{'} \in S}||[R|t]\hat D_t(p)p-p^{'}||_2</script><p>设计卷积神经网络的几何误差，将所有匹配项的对极误差和重投影误差降至最低，可模仿传统SLAM中的非线性姿态估计策略。</p>
+<h3 id="3-3-Consistent-Depth-Estimation"><a href="#3-3-Consistent-Depth-Estimation" class="headerlink" title="3.3 Consistent Depth Estimation"></a>3.3 Consistent Depth Estimation</h3><p>在深度估计模块中，损失函数从源帧到目标帧成对进行计算，即使位姿估计网络一次输出$N-1$个相对姿势，也无法确定这些相对姿势是否按相同比例对齐。本文提出了运动一致深度估计公式来解决此问题。</p>
+<h4 id="3-3-1-Forward-backward-consistency"><a href="#3-3-1-Forward-backward-consistency" class="headerlink" title="3.3.1 Forward-backward consistency"></a>3.3.1 Forward-backward consistency</h4><p>本文提出了单目图像的前后一致性。除了双线性采样像素值外，还估计出当前帧的前向和后向图像的深度图。这个过程产生了两个合成的深度图，它们可以用来约束目标图像深度图$\widetilde D^{(s)}_t$的估计。由于在单目估计中深度仅按比例确定，因此在限制深度之前须对深度按比例进行归一化对齐。前后一致性损失计算公式为：</p>
+<script type="math/tex; mode=display">
+L_{depth}=\frac{1}{|M|}\sum _{\forall p\in M}|\frac{mean(D_t·M)}{mean(\widetilde D^{(s)}_t·M)}·\widetilde D^{(s)}_t(p)-D_t(p)|</script><h4 id="3-3-2-Multi-view-consistency"><a href="#3-3-2-Multi-view-consistency" class="headerlink" title="3.3.2 Multi-view consistency"></a>3.3.2 Multi-view consistency</h4><p>上述损失函数的设计都是基于单帧进行深度估计，为了增强长视频序列的多帧尺度一致性，本文提出了多视角一致性损失，该损失以目标图像（中间帧图像）为尺度对齐的纽带，惩罚项计算了前向深度和后向深度的不一致损失。</p>
+<p>形式上，给定连续图像$(I_1,I_2,I_3)$，$I_2$为目标图像，对应的深度估计结果为$(D_1,D_2,D_3)$，位姿估计结果为$(T_{2 \to 1},T_{2 \to 3})$，归一化深度图计算公式为$\overline D_1=s_{12}·D_1$，$I_1$到$I_3$的位姿变化为$T_{1 \to 3}=T_{2 \to 1}^{-1}·T_{2 \to 3}$。多视图损失将深度一致性项和光度一致性项最小化为：</p>
+<script type="math/tex; mode=display">
+L_{multi}=\alpha L_{pixel}(I_1,\widetilde I^{(3)}_1)+(1-\alpha)L_{SSIM}(I_1,\widetilde I^{(3)}_1)+\frac{1}{|M_{13}|}\sum_{\forall p\in M_{13}}|\overline D_1(p)-\overline D^{(3)}_1(p)|</script><p>$\widetilde I^{(3)}_1$和$\overline D^{(3)}_1$是给定$\overline D_3$ 和$T_{1 \to 3}$之后通过计算得到的重建图像。$L_{multi}$更优于成对损失$L_{pixel}$，$L_{SSIM}$，$L_{epi}$和$L_{depth}$，它利用了链式姿态计算，将两个相对姿势调整到相同的比例，通过对齐多对连续图像来促进增量定位，优化了单目SLAM的结果。</p>
+<h2 id="4-Experiment"><a href="#4-Experiment" class="headerlink" title="4. Experiment"></a>4. Experiment</h2><h3 id="4-1-Depth-Estimation"><a href="#4-1-Depth-Estimation" class="headerlink" title="4.1 Depth Estimation"></a>4.1 Depth Estimation</h3><p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/7.png" alt="7"></p>
+<p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/8.png" alt="8"></p>
+<h3 id="4-2-Pose-Estimation"><a href="#4-2-Pose-Estimation" class="headerlink" title="4.2 Pose Estimation"></a>4.2 Pose Estimation</h3><p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/9.png" alt="9" style="zoom:33%;"></p>
+<p><img src="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/10.png" alt="10" style="zoom:30%;"></p>
+<h2 id="5-Reference"><a href="#5-Reference" class="headerlink" title="5. Reference"></a>5. Reference</h2><p><a href="https://arxiv.org/abs/1909.09115v1" target="_blank" rel="noopener">https://arxiv.org/abs/1909.09115v1</a></p>
+<p><a href="https://arxiv.org/abs/1704.07813" target="_blank" rel="noopener">https://arxiv.org/abs/1704.07813</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%8D%95%E7%9B%AE%E6%B7%B1%E5%BA%A6%E4%BC%B0%E8%AE%A1/" rel="tag"># 单目深度估计</a>
+          
+            <a href="/tags/%E8%87%AA%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/" rel="tag"># 自监督学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/" rel="next" title="Inductive Representation Learning on Large Graphs">
+                <i class="fa fa-chevron-left"></i> Inductive Representation Learning on Large Graphs
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">COOLA-LAB</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Previous-work"><span class="nav-text">1. Previous work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Main-Idea"><span class="nav-text">2. Main Idea</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Approach"><span class="nav-text">3. Approach</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Photometric-consistency"><span class="nav-text">3.1 Photometric consistency</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Epipolar-geometric-consistency"><span class="nav-text">3.2 Epipolar geometric consistency</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-Symmetric-epipolar-error"><span class="nav-text">3.2.1 Symmetric epipolar error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-Re-projection-error"><span class="nav-text">3.2.2 Re-projection error</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Consistent-Depth-Estimation"><span class="nav-text">3.3 Consistent Depth Estimation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-Forward-backward-consistency"><span class="nav-text">3.3.1 Forward-backward consistency</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-Multi-view-consistency"><span class="nav-text">3.3.2 Multi-view consistency</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Experiment"><span class="nav-text">4. Experiment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Depth-Estimation"><span class="nav-text">4.1 Depth Estimation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Pose-Estimation"><span class="nav-text">4.2 Pose Estimation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Reference"><span class="nav-text">5. Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">COOLA-LAB</span>
+
+  
+</div>
+
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
