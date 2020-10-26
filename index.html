@@ -248,6 +248,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/" itemprop="url">SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-26T20:46:34+08:00">
+                2020-10-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文通过分析和比较各类跟踪器在目标状态估计任务上的表现，做出两项主要贡献：提出一套高性能通用跟踪器的设计要点；根据要点设计出SiamFC++跟踪器，同时证明设计要点的有效性。</p>
+<h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><p>跟踪任务可以被分解为分类任务和状态估计任务的组合：第一个任务的目的是通过分类指出目标的粗略位置，第二个任务则旨在估计精确的目标状态。</p>
+<p>对于第二项任务，过去的跟踪器采取以下三种方式：以DCF和SiamFC为代表，采用粗暴的多尺度测试；以ATOM为代表，用梯度递增迭代地调整最初的目标框；以及SiamRPN家族——引入RPN思想。在对以上三种类型的方式进行分析和对比以后，本文总结出四点通用跟踪器的设计要点：</p>
+<p>G1：Decomposition of classification and state estimation，分开进行分类和状态估计。</p>
+<p>G2：Non-ambiguous scoring，无歧义分数，实际上是具有准确对应关系的分类置信分数。</p>
+<p>G3：Prior knowledge-free，无先验知识。目标跟踪任务不应当拥有目标的尺度、大小等先验知识。</p>
+<p>G4：Estimation quality assessment，对状态估计质量的独立评估。</p>
+<h2 id="2-Main-Idea"><a href="#2-Main-Idea" class="headerlink" title="2. Main Idea"></a>2. Main Idea</h2><p>本文首先遵循G1原则做两个分支。</p>
+<p><img src="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/1.jpg" style="zoom:70%;"></p>
+<p>分类部分与siamFC基本一致，采取位置作为训练样本——假如响应图中某个点对应的原图位置位于真实的目标范围中，则这个位置属于正样本。</p>
+<p>对于回归分支，其设计思路也是针对每一个位置做回归——最后一层预测特征图上的每个位置$(x,y)$对于的输入图像位置$\left(\left\lfloor\frac{s}{2}\right\rfloor+ xs,\left\lfloor\frac{s}{2}\right\rfloor+ ys\right)$到地面真实边界框上下左右四个边的距离定义为一个4维的向量：</p>
+<script type="math/tex; mode=display">
+t 
+∗
+ =(l 
+∗
+ ,t 
+∗
+ ,r 
+∗
+ ,b 
+∗
+ )</script><p>则对该位置的回归任务可以形式化为：</p>
+<script type="math/tex; mode=display">
+l^{*}=\left(\left\lfloor\frac{s}{2}\right\rfloor+ xs\right)-x_0</script><script type="math/tex; mode=display">
+t^{*}=\left(\left\lfloor\frac{s}{2}\right\rfloor+ ys\right)-y_0</script><script type="math/tex; mode=display">
+r^{*}=x_1-\left(\left\lfloor\frac{s}{2}\right\rfloor+ xs\right)</script><script type="math/tex; mode=display">
+b^{*}=y_1-\left(\left\lfloor\frac{s}{2}\right\rfloor+ ys\right)</script><p>其中$ (x_0,y_0)$和$ (x_1,y_1)$表示与$(x,y)对应的真实边界框$B^{*}$的左上角和右下角。</p>
+<p>由于分类分数和回归操作都是针对“位置”这个概念的，也就是操作的区域都是基于该位置的周围一片区域，而不是与人为设定的anchor对应，所以满足非歧义性（G2）。加上没有预定义anchor，所以也没有先验知识的应用，符合（G3）。</p>
+<p>接下来完成G4——对估计质量的独立评价：本文通过添加$1 × 1$卷积层来添加简单但有效的质量评估分支,该层输出反映子窗口中心周围的输入像素在跟踪问题中重要性高于其余部分的优先空间得分（Prior Spatial Score，PSS）：</p>
+<script type="math/tex; mode=display">
+PSS^{*}=\sqrt{\frac {min(l^{*},r^{*})}{max(l^{*},r^{*})}× \frac {min(t^{*},b^{*})}{max(t^{*},b^{*})}}</script><p>通过将PSS与相应的预测分类分数相乘来产生用于最终框选择的分数。这样，远离物体中心的点的权重就会大大下降，从而提高了跟踪精度。</p>
+<h2 id="3-Experiments"><a href="#3-Experiments" class="headerlink" title="3. Experiments"></a>3. Experiments</h2><h3 id="3-1-From-SiamFC-towards-SiamFC"><a href="#3-1-From-SiamFC-towards-SiamFC" class="headerlink" title="3.1 From SiamFC towards SiamFC++"></a>3.1 From SiamFC towards SiamFC++</h3><p><img src="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/2.jpg"></p>
+<h3 id="3-2-Results-on-Several-Benchmarks"><a href="#3-2-Results-on-Several-Benchmarks" class="headerlink" title="3.2 Results on Several Benchmarks"></a>3.2 Results on Several Benchmarks</h3><p><img src="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/3.jpg" style="zoom:80%;"></p>
+<h3 id="3-3-Comparison-with-Trackers-that-Do-not-Apply-Our-Guidelines"><a href="#3-3-Comparison-with-Trackers-that-Do-not-Apply-Our-Guidelines" class="headerlink" title="3.3 Comparison with Trackers that Do not Apply Our Guidelines"></a>3.3 Comparison with Trackers that Do not Apply Our Guidelines</h3><p><img src="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/4.jpg" style="zoom:80%;"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2059,7 +2235,7 @@ c x+k, & x>0
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2081,7 +2257,7 @@ c x+k, & x>0
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

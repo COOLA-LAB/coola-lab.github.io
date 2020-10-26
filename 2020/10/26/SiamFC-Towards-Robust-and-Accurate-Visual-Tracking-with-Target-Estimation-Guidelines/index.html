@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="动态风险密度,自主导航," />
+  <meta name="keywords" content="目标跟踪,目标状态估计," />
 
 
 
@@ -79,23 +79,23 @@
 
 
 
-<meta name="description" content="这篇论文提出了一种叫做“动态风险密度”（Dynamic Risk Density）的方法，用于解决在没有目标检测的杂乱环境下进行导航的问题。 1. Previous work 在 Navigating Congested Environments with Risk Level Sets 这篇论文中，作者提出了占据风险代价函数： H(q,x,\dot{x})&#x3D;\sum^{n}_{i&#x3D;1}{\fra">
+<meta name="description" content="本文通过分析和比较各类跟踪器在目标状态估计任务上的表现，做出两项主要贡献：提出一套高性能通用跟踪器的设计要点；根据要点设计出SiamFC++跟踪器，同时证明设计要点的有效性。 1. Introduction跟踪任务可以被分解为分类任务和状态估计任务的组合：第一个任务的目的是通过分类指出目标的粗略位置，第二个任务则旨在估计精确的目标状态。 对于第二项任务，过去的跟踪器采取以下三种方式：以DCF和Si">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection">
-<meta property="og:url" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/index.html">
+<meta property="og:title" content="SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines">
+<meta property="og:url" content="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/index.html">
 <meta property="og:site_name" content="COOLA-LAB">
-<meta property="og:description" content="这篇论文提出了一种叫做“动态风险密度”（Dynamic Risk Density）的方法，用于解决在没有目标检测的杂乱环境下进行导航的问题。 1. Previous work 在 Navigating Congested Environments with Risk Level Sets 这篇论文中，作者提出了占据风险代价函数： H(q,x,\dot{x})&#x3D;\sum^{n}_{i&#x3D;1}{\fra">
-<meta property="og:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/1.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/2.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/3.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/4.jpg">
-<meta property="article:published_time" content="2020-09-13T11:00:00.000Z">
-<meta property="article:modified_time" content="2020-09-14T00:24:00.380Z">
+<meta property="og:description" content="本文通过分析和比较各类跟踪器在目标状态估计任务上的表现，做出两项主要贡献：提出一套高性能通用跟踪器的设计要点；根据要点设计出SiamFC++跟踪器，同时证明设计要点的有效性。 1. Introduction跟踪任务可以被分解为分类任务和状态估计任务的组合：第一个任务的目的是通过分类指出目标的粗略位置，第二个任务则旨在估计精确的目标状态。 对于第二项任务，过去的跟踪器采取以下三种方式：以DCF和Si">
+<meta property="og:image" content="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/2.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/3.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/4.jpg">
+<meta property="article:published_time" content="2020-10-26T12:46:34.000Z">
+<meta property="article:modified_time" content="2020-10-26T12:50:18.482Z">
 <meta property="article:author" content="COOLA-LAB">
-<meta property="article:tag" content="动态风险密度">
-<meta property="article:tag" content="自主导航">
+<meta property="article:tag" content="目标跟踪">
+<meta property="article:tag" content="目标状态估计">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/1.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/1.jpg">
 
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/"/>
 
 
 
 
 
-  <title>Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection | COOLA-LAB</title>
+  <title>SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines | COOLA-LAB</title>
   
 
 
@@ -258,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="COOLA-LAB">
@@ -275,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection</h1>
+          <h1 class="post-title" itemprop="name headline">SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines</h1>
         
 
         <div class="post-meta">
@@ -287,8 +287,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-13T19:00:00+08:00">
-                2020-09-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-26T20:46:34+08:00">
+                2020-10-26
               </time>
             
 
@@ -347,49 +347,41 @@
       
 
       
-        <p>这篇论文提出了一种叫做“动态风险密度”（Dynamic Risk Density）的方法，用于解决在没有目标检测的杂乱环境下进行导航的问题。</p>
-<h2 id="1-Previous-work"><a href="#1-Previous-work" class="headerlink" title="1. Previous work"></a>1. Previous work</h2><p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/1.jpg" style="zoom:33%;"></p>
-<p>在 Navigating Congested Environments with Risk Level Sets 这篇论文中，作者提出了占据风险代价函数：</p>
-<script type="math/tex; mode=display">H(q,x,\dot{x})=\sum^{n}_{i=1}{\frac{\exp(-(q-x_i)^T\Omega(q-x_i))}{1+\exp(-\alpha\dot{x_i}^T(q-x_i))}},\Omega=diag\{\frac{1}{\sigma^2_x},\frac{1}{\sigma^2_y}\} \tag{1}</script><p>其中，</p>
-<ul>
-<li>$q$：表示二维平面内的任意一个点；</li>
-<li>$x$：表示二维平面内所有障碍物的位置，例如图(a)中的四个点；</li>
-<li>$\dot{x}$：表示二维平面内所有障碍物的速度，例如图(a)中四个点上的箭头。</li>
-</ul>
-<p>通过计算 $H$，我们可以得到平面内每个点的占据风险代价，可以将其看成是该点在下一个时刻会出现障碍物的概率。在导航的过程中，为了不发生碰撞，自然要避免经过 $H$ 值大的点。</p>
-<p>$H$ 是由一个高斯峰 $\exp(-(q-x_i)^T\Omega(q-x_i))$ 乘上一个 logistic 函数 $\frac{1}{1+\exp(-\alpha\dot{x_i}^T(q-x_i))}$ 构成。很显然，离障碍物越近的点 $H$ 值会越大，这由高斯峰来进行描述，logistic 函数则是对这个高斯峰在速度方向上进行了偏移，如图(b)所示。</p>
-<p>在导航的过程中，给定一个阈值 $H_p$，只要确保只在 $H\leq H_p$ 的区域内行动就能避免发生碰撞。</p>
-<h2 id="2-Main-Idea"><a href="#2-Main-Idea" class="headerlink" title="2. Main Idea"></a>2. Main Idea</h2><p>在 Previous work 提到的方法中，我们假设已知了环境中所有障碍物的位置和速度，但在现实场景下，这往往是很难得到的。因此，在 Dynamic Risk Density for Autonomous Navigation in Cluttered Environments without Object Detection 这篇论文中，作者对其进行了改进，分别用“占据密度”(occupancy density)和“速度场”(velocity flow field)代替了障碍物的位置和速度。提出了动态风险密度：</p>
-<script type="math/tex; mode=display">H_\rho(q,t,\rho,V)=\frac{\rho(q,t)}{1+\exp(\alpha\nabla\rho(q,t)\cdot V(q,t))} \tag{2}</script><p>其中，</p>
-<ul>
-<li>$\rho$：表示占据密度；</li>
-<li>$V$：表示速度场。</li>
-</ul>
-<p>$H_\rho$ 和 $H$ 的意义类似。</p>
-<p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/2.jpg" style="zoom:33%;"></p>
-<p>通过仿真可以看出，由这两种方法得到的轮廓线非常相似（左图是计算 $H$ 值得到的，右图是计算 $H_\rho$ 值得到的）。</p>
-<h2 id="3-Approach"><a href="#3-Approach" class="headerlink" title="3. Approach"></a>3. Approach</h2><p>在这篇论文中，通过使用一个二维激光扫描仪来构建环境的占据网格而得到占据密度。</p>
-<p>对于如何计算速度场，论文中提出了两种方法，分别是基于<strong>聚类</strong>的方法和基于<strong>密度流</strong>的方法。</p>
-<h3 id="3-1-Velocity-Field-Estimation-from-Density-Flow"><a href="#3-1-Velocity-Field-Estimation-from-Density-Flow" class="headerlink" title="3.1 Velocity Field Estimation from Density Flow"></a>3.1 Velocity Field Estimation from Density Flow</h3><p>基于聚类的方法，使用 k-means 算法对占据网格进行聚类，并计算聚类中心的速度，再通过 Voronoi 分布将聚类中心的速度映射到所有的点上。</p>
-<p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/3.jpg" style="zoom:33%;"></p>
-<h3 id="3-2-Velocity-Field-Estimation-from-Density-Flow"><a href="#3-2-Velocity-Field-Estimation-from-Density-Flow" class="headerlink" title="3.2 Velocity Field Estimation from Density Flow"></a>3.2 Velocity Field Estimation from Density Flow</h3><p>基于密度流的方法与计算机视觉中的光流法类似。</p>
-<p>在这里引入了两个假设：</p>
-<ol>
-<li>密度不变性，即同一个点在经过 $\Delta t$ 时间移动了 $\Delta x$， $\Delta y$ 之后，密度没有发生改变：</li>
-</ol>
-<script type="math/tex; mode=display">\rho^t(x,y)=\rho(x,y,t)=\rho(x+\Delta x,y+\Delta y,t+\Delta t) \tag{3}</script><ol>
-<li>对于 $\rho(x+\Delta x,y+\Delta y,t+\Delta t)$ 可以进行一阶泰勒展开：</li>
-</ol>
-<script type="math/tex; mode=display">\rho(x+\Delta x,y+\Delta y,t+\Delta t)=\rho(x,y,t)+\frac{\partial\rho}{\partial x}\Delta x+\frac{\partial\rho}{\partial y}\Delta y+\frac{\partial\rho}{\partial t}\Delta t+H.O.T. \tag{4}</script><p>结合(3)(4)可以得到：</p>
-<script type="math/tex; mode=display">\frac{\partial\rho}{\partial x}\frac{\Delta x}{\Delta t} +\frac{\partial\rho}{\partial y}\frac{\Delta y}{\Delta t}+\frac{\partial\rho}{\partial t}=0 \tag{5}</script><p>对(5)进行变量替换：</p>
-<script type="math/tex; mode=display">u=\frac{\Delta x}{\Delta t},v=\frac{\Delta y}{\Delta t}</script><script type="math/tex; mode=display">I_x=\frac{\partial\rho}{\partial x},I_y=\frac{\partial\rho}{\partial y},I_t=\frac{\partial\rho}{\partial t}</script><p>化简可得：</p>
-<script type="math/tex; mode=display">\left[\begin{matrix} I_x&I_y \end{matrix}\right] \left[\begin{matrix} u\\v \end{matrix}\right] = -I_t \tag{6}</script><p>这是一个二元一次方程，无法进行求解，因此，必须引入额外的约束来计算 u,v。我们假设某一个窗口内的点具有相同的运动。</p>
-<p>考虑一个大小为 $w*w$ 大小的窗口，它含有 $w^2$ 数量的像素。由于该窗口内像素具有 同样的运动，因此我们共有 $w^2$ 个方程： </p>
-<script type="math/tex; mode=display">\left[\begin{matrix} I_x&I_y \end{matrix}\right]_k \left[\begin{matrix} u\\v \end{matrix}\right] = -I_{tk}, k=1,2,...,w^2 \tag{7}</script><p>记：</p>
-<script type="math/tex; mode=display">A=\left[\begin{matrix}[I_x,I_y]_1\\ \vdots\\ [I_x,I_y]_k\end{matrix}\right],b=\left[\begin{matrix}I_{t1}\\ \vdots\\ I_{tk}\end{matrix}\right]</script><p>于是整个方程为：</p>
-<script type="math/tex; mode=display">A\left[\begin{matrix}u\\v\end{matrix}\right]=-b \tag{8}</script><p>利用最小二乘法可以求得：</p>
-<script type="math/tex; mode=display">\left[\begin{matrix}u\\v\end{matrix}\right]^*=-(A^TA)^{-1}A^Tb \tag{9}</script><h3 id="3-3-Navigation-Algorithm"><a href="#3-3-Navigation-Algorithm" class="headerlink" title="3.3 Navigation Algorithm"></a>3.3 Navigation Algorithm</h3><p><img src="/2020/09/13/Dynamic-Risk-Density-for-Autonomous-Navigation-in-Cluttered-Environments-without-Object-Detection/4.jpg" style="zoom:33%;"></p>
-<p>Experiment：<a href="https://www.youtube.com/watch?v=uXry23LxpWw" target="_blank" rel="noopener">https://www.youtube.com/watch?v=uXry23LxpWw</a></p>
+        <p>本文通过分析和比较各类跟踪器在目标状态估计任务上的表现，做出两项主要贡献：提出一套高性能通用跟踪器的设计要点；根据要点设计出SiamFC++跟踪器，同时证明设计要点的有效性。</p>
+<h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><p>跟踪任务可以被分解为分类任务和状态估计任务的组合：第一个任务的目的是通过分类指出目标的粗略位置，第二个任务则旨在估计精确的目标状态。</p>
+<p>对于第二项任务，过去的跟踪器采取以下三种方式：以DCF和SiamFC为代表，采用粗暴的多尺度测试；以ATOM为代表，用梯度递增迭代地调整最初的目标框；以及SiamRPN家族——引入RPN思想。在对以上三种类型的方式进行分析和对比以后，本文总结出四点通用跟踪器的设计要点：</p>
+<p>G1：Decomposition of classification and state estimation，分开进行分类和状态估计。</p>
+<p>G2：Non-ambiguous scoring，无歧义分数，实际上是具有准确对应关系的分类置信分数。</p>
+<p>G3：Prior knowledge-free，无先验知识。目标跟踪任务不应当拥有目标的尺度、大小等先验知识。</p>
+<p>G4：Estimation quality assessment，对状态估计质量的独立评估。</p>
+<h2 id="2-Main-Idea"><a href="#2-Main-Idea" class="headerlink" title="2. Main Idea"></a>2. Main Idea</h2><p>本文首先遵循G1原则做两个分支。</p>
+<p><img src="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/1.jpg" style="zoom:70%;"></p>
+<p>分类部分与siamFC基本一致，采取位置作为训练样本——假如响应图中某个点对应的原图位置位于真实的目标范围中，则这个位置属于正样本。</p>
+<p>对于回归分支，其设计思路也是针对每一个位置做回归——最后一层预测特征图上的每个位置$(x,y)$对于的输入图像位置$\left(\left\lfloor\frac{s}{2}\right\rfloor+ xs,\left\lfloor\frac{s}{2}\right\rfloor+ ys\right)$到地面真实边界框上下左右四个边的距离定义为一个4维的向量：</p>
+<script type="math/tex; mode=display">
+t 
+∗
+ =(l 
+∗
+ ,t 
+∗
+ ,r 
+∗
+ ,b 
+∗
+ )</script><p>则对该位置的回归任务可以形式化为：</p>
+<script type="math/tex; mode=display">
+l^{*}=\left(\left\lfloor\frac{s}{2}\right\rfloor+ xs\right)-x_0</script><script type="math/tex; mode=display">
+t^{*}=\left(\left\lfloor\frac{s}{2}\right\rfloor+ ys\right)-y_0</script><script type="math/tex; mode=display">
+r^{*}=x_1-\left(\left\lfloor\frac{s}{2}\right\rfloor+ xs\right)</script><script type="math/tex; mode=display">
+b^{*}=y_1-\left(\left\lfloor\frac{s}{2}\right\rfloor+ ys\right)</script><p>其中$ (x_0,y_0)$和$ (x_1,y_1)$表示与$(x,y)对应的真实边界框$B^{*}$的左上角和右下角。</p>
+<p>由于分类分数和回归操作都是针对“位置”这个概念的，也就是操作的区域都是基于该位置的周围一片区域，而不是与人为设定的anchor对应，所以满足非歧义性（G2）。加上没有预定义anchor，所以也没有先验知识的应用，符合（G3）。</p>
+<p>接下来完成G4——对估计质量的独立评价：本文通过添加$1 × 1$卷积层来添加简单但有效的质量评估分支,该层输出反映子窗口中心周围的输入像素在跟踪问题中重要性高于其余部分的优先空间得分（Prior Spatial Score，PSS）：</p>
+<script type="math/tex; mode=display">
+PSS^{*}=\sqrt{\frac {min(l^{*},r^{*})}{max(l^{*},r^{*})}× \frac {min(t^{*},b^{*})}{max(t^{*},b^{*})}}</script><p>通过将PSS与相应的预测分类分数相乘来产生用于最终框选择的分数。这样，远离物体中心的点的权重就会大大下降，从而提高了跟踪精度。</p>
+<h2 id="3-Experiments"><a href="#3-Experiments" class="headerlink" title="3. Experiments"></a>3. Experiments</h2><h3 id="3-1-From-SiamFC-towards-SiamFC"><a href="#3-1-From-SiamFC-towards-SiamFC" class="headerlink" title="3.1 From SiamFC towards SiamFC++"></a>3.1 From SiamFC towards SiamFC++</h3><p><img src="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/2.jpg"></p>
+<h3 id="3-2-Results-on-Several-Benchmarks"><a href="#3-2-Results-on-Several-Benchmarks" class="headerlink" title="3.2 Results on Several Benchmarks"></a>3.2 Results on Several Benchmarks</h3><p><img src="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/3.jpg" style="zoom:80%;"></p>
+<h3 id="3-3-Comparison-with-Trackers-that-Do-not-Apply-Our-Guidelines"><a href="#3-3-Comparison-with-Trackers-that-Do-not-Apply-Our-Guidelines" class="headerlink" title="3.3 Comparison with Trackers that Do not Apply Our Guidelines"></a>3.3 Comparison with Trackers that Do not Apply Our Guidelines</h3><p><img src="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/4.jpg" style="zoom:80%;"></p>
 
       
     </div>
@@ -407,9 +399,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%8A%A8%E6%80%81%E9%A3%8E%E9%99%A9%E5%AF%86%E5%BA%A6/" rel="tag"># 动态风险密度</a>
+            <a href="/tags/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/" rel="tag"># 目标跟踪</a>
           
-            <a href="/tags/%E8%87%AA%E4%B8%BB%E5%AF%BC%E8%88%AA/" rel="tag"># 自主导航</a>
+            <a href="/tags/%E7%9B%AE%E6%A0%87%E7%8A%B6%E6%80%81%E4%BC%B0%E8%AE%A1/" rel="tag"># 目标状态估计</a>
           
         </div>
       
@@ -422,8 +414,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/" rel="next" title="Learning RoI Transformer for Detecting Oriented Objects in Aerial Images">
-                <i class="fa fa-chevron-left"></i> Learning RoI Transformer for Detecting Oriented Objects in Aerial Images
+              <a href="/2020/09/22/Self-Supervised-Learning-of-Depth-and-Motion-Under-Photometric-Inconsistency/" rel="next" title="Self-Supervised Learning of Depth and Motion Under Photometric Inconsistency">
+                <i class="fa fa-chevron-left"></i> Self-Supervised Learning of Depth and Motion Under Photometric Inconsistency
               </a>
             
           </div>
@@ -431,10 +423,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/" rel="prev" title="Inductive Representation Learning on Large Graphs">
-                Inductive Representation Learning on Large Graphs <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -566,7 +554,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Previous-work"><span class="nav-text">1. Previous work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Main-Idea"><span class="nav-text">2. Main Idea</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Approach"><span class="nav-text">3. Approach</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Velocity-Field-Estimation-from-Density-Flow"><span class="nav-text">3.1 Velocity Field Estimation from Density Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Velocity-Field-Estimation-from-Density-Flow"><span class="nav-text">3.2 Velocity Field Estimation from Density Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Navigation-Algorithm"><span class="nav-text">3.3 Navigation Algorithm</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction"><span class="nav-text">1. Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Main-Idea"><span class="nav-text">2. Main Idea</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Experiments"><span class="nav-text">3. Experiments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-From-SiamFC-towards-SiamFC"><span class="nav-text">3.1 From SiamFC towards SiamFC++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Results-on-Several-Benchmarks"><span class="nav-text">3.2 Results on Several Benchmarks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Comparison-with-Trackers-that-Do-not-Apply-Our-Guidelines"><span class="nav-text">3.3 Comparison with Trackers that Do not Apply Our Guidelines</span></a></li></ol></li></ol></div>
             
 
           </div>
