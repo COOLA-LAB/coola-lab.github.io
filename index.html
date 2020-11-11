@@ -248,6 +248,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/" itemprop="url">RouteNet: Leveraging Graph Neural Networks for Network Modeling and Optimization in SDN </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-11T08:43:27+08:00">
+                2020-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇论文提出了一种叫做RouteNet的方法，这是一种基于MPNN的新型网络模型，用于预测某种场景下的网络的特征矩阵，该模型能够了解拓扑，路由和输入流量之间的复杂关系，从而可以准确估算每个源/目标每个数据包的KPI指标。</p>
+<h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1. 问题描述"></a>1. 问题描述</h2><h3 id="一些相关概念"><a href="#一些相关概念" class="headerlink" title="一些相关概念"></a>一些相关概念</h3><ul>
+<li>KPI—(Key performance Indicator)<ul>
+<li>时延（packet发送和接受的时间差），抖动（相邻packet时延的差值），丢包率（一段时间内丢失的packet比例）等一些描述网络性能的指标，具体可以由一个邻接矩阵矩阵来表示每个节点对之间的一段时间内的平均表现。</li>
+</ul>
+</li>
+<li>网络优化—(Network optimization)<ul>
+<li>进行一系列操作使得网络的性能提升</li>
+<li>网络优化可以分为两部分循环迭代：1）通过网络模型获取量化的网络性能指标，2）将量化的指标输入优化器获得结果</li>
+</ul>
+</li>
+<li>网络模型—(Network modeling)<ul>
+<li>网络优化首先要能度量网络的性能（“<em>we can only optimize what we can model.</em> ”），网络模型就是负责量化网络的目前性能</li>
+<li>主流的做法有两个：数学模型（主要是基于排队论的基础—特点是精度低但是速度快）、仿真器（能获得精确的结果，但是仿真速度比较慢）</li>
+</ul>
+</li>
+</ul>
+<p>在SDN网络结构中<img src="/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110220025370.png" alt="image-20201110220025370">，如图所示可以实时获取全局的网络信息，从而进行优化，以达到相应的优化目标，左边部分为数据面板，右边部分为控制面板，整个网络优化的过程就可以部署在控制面板中。</p>
+<h3 id="本文主要解决问题"><a href="#本文主要解决问题" class="headerlink" title="本文主要解决问题"></a>本文主要解决问题</h3><p>文章主要是利用MPNN的思想建立了一个监督学习的神经网络用来预测网络的KPI指标，监督的样本来自仿真器的Ground-Truth，最后训练出来的模型具有应对类似拓扑的泛化能力以及实验证明可靠的精度。</p>
+<p>换言之，主要就是用AI代替了传统网络优化过程中的网络KPI量化这一步骤。</p>
+<h2 id="2-主要思想"><a href="#2-主要思想" class="headerlink" title="2. 主要思想"></a>2. 主要思想</h2><h3 id="MPNN-Message-Passing-Neural-Network-—通用GCN框架"><a href="#MPNN-Message-Passing-Neural-Network-—通用GCN框架" class="headerlink" title="MPNN(Message-Passing Neural Network)—通用GCN框架"></a>MPNN(Message-Passing Neural Network)—通用GCN框架</h3><p>文章作者表示，方法的主要思想起源于MPNN（Gilmer J, Schoenholz S S, Riley P F, et al. Neural message passing for quantum chemistry[J]. arXiv preprint arXiv:1704.01212, 2017.），这篇文章里主要概括了之前的主要GCN模型，并抽象出一个普适的GCN框架，这个框架将GCN网络分为三部分：</p>
+<ol>
+<li>Message Passing</li>
+<li>State Update</li>
+<li>Readout</li>
+</ol>
+<p>这边结合之前张凯学长的一篇<a href="https://coola-lab.github.io/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/" target="_blank" rel="noopener">组会报告</a>来解释这个框架，这篇报告的文章提出了一个GraphSAGE的方法，算法过程如下：<img src="/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110224404481.png" alt></p>
+<p>算法过程中标出的部分即为三个MPNN的三个步骤。</p>
+<p>GCN的贡献就在于能提取出传统网络的拓扑信息，然后进行接下来的分类回归等操作。</p>
+<h3 id="RouteNet"><a href="#RouteNet" class="headerlink" title="RouteNet"></a>RouteNet</h3><p>一个packet传输经过若干条链路，所有链路的集合称之为路径，作者的模型基于以下的原则：</p>
+<ol>
+<li>每个路径的状态取决于所有链路的状态</li>
+<li>一个链路的状态取决于所有经过这条链路的路径的状态</li>
+</ol>
+<h2 id="3-方法"><a href="#3-方法" class="headerlink" title="3. 方法"></a>3. 方法</h2><p>算法过程如下图所示：<img src="/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110231404662.png" alt="image-20201110231404662"></p>
+<p>首先初始化路径和各个链路的初始状态，接着对每个链路和路径进行Message Passing 操作，最后再进行readout操作，通过反向传播进行学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2235,7 +2412,7 @@ c x+k, & x>0
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2257,7 +2434,7 @@ c x+k, & x>0
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
