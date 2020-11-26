@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="移动充电调度,近似算法," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇论文从任务角度考虑无线传感器网络中的移动充电调度问题，提出一个(1-1&#x2F;e)4的近似算法。 1. Background传感器网络是由部署在特定区域内用于完成感知、采集、计算等一系列传感器节点组成。由于传感器节点的电池容量优先，所以需要定期给传感器充电。传统的方法要么是使用不灵活的静态设备进行充电，要么研究工作只关注移动充电的模式（距离、角度等）或者充电的指标（传输率、延迟等），很少从任务角度来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Collaborated Tasks-driven Mobile Charging and Scheduling: A Near Optimal Result">
+<meta property="og:url" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/index.html">
+<meta property="og:site_name" content="COOLA-LAB">
+<meta property="og:description" content="这篇论文从任务角度考虑无线传感器网络中的移动充电调度问题，提出一个(1-1&#x2F;e)4的近似算法。 1. Background传感器网络是由部署在特定区域内用于完成感知、采集、计算等一系列传感器节点组成。由于传感器节点的电池容量优先，所以需要定期给传感器充电。传统的方法要么是使用不灵活的静态设备进行充电，要么研究工作只关注移动充电的模式（距离、角度等）或者充电的指标（传输率、延迟等），很少从任务角度来">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/scenario.gif">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/RC.gif">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/example.gif">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/overall%20task%20utility.gif">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/energy%20utilization%20efficience.gif">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/Indoor%20office%20room.gif">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/Overall%20task%20utility%20for%20indoor%20scenario.gif">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/Outdoor%20soccer%20field.gif">
+<meta property="og:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/Overall%20task%20utility%20for%20outdoor%20scenario.gif">
+<meta property="article:published_time" content="2020-11-26T13:45:49.000Z">
+<meta property="article:modified_time" content="2020-11-26T13:56:36.768Z">
+<meta property="article:author" content="COOLA-LAB">
+<meta property="article:tag" content="移动充电调度">
+<meta property="article:tag" content="近似算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/scenario.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/"/>
+
+
+
+
+
+  <title>Collaborated Tasks-driven Mobile Charging and Scheduling: A Near Optimal Result | COOLA-LAB</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">COOLA-LAB</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Collaborated Tasks-driven Mobile Charging and Scheduling: A Near Optimal Result</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-26T21:45:49+08:00">
+                2020-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇论文从任务角度考虑无线传感器网络中的移动充电调度问题，提出一个(1-1/e)4的近似算法。</p>
+<h2 id="1-Background"><a href="#1-Background" class="headerlink" title="1. Background"></a>1. Background</h2><p>传感器网络是由部署在特定区域内用于完成感知、采集、计算等一系列传感器节点组成。由于传感器节点的电池容量优先，所以需要定期给传感器充电。传统的方法要么是使用不灵活的静态设备进行充电，要么研究工作只关注移动充电的模式（距离、角度等）或者充电的指标（传输率、延迟等），很少从任务角度来考虑充电调度，导致最终的充电效果不佳。</p>
+<p>因此这篇论文从任务级考虑传感器的充电需求，具体的问题场景如下图所示。</p>
+<p><img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/scenario.gif"></p>
+<p>在一个区域内，存在一些传感器节点和任务节点，一个传感器可参与多个任务的执行，一个任务也可能同时需要多个传感器协作执行。这篇论文采用移动充电小车给传感器充电，由于小车所携带的能量有限，因此只能挑选一些“重要传感器节点”进行充电，小车从起始位置出发，沿着规划的充电路径，并在完成充电任务后回到源点。</p>
+<h2 id="2-System-model-amp-Problem-formulation"><a href="#2-System-model-amp-Problem-formulation" class="headerlink" title="2. System model &amp; Problem formulation"></a>2. System model &amp; Problem formulation</h2><h3 id="System-model"><a href="#System-model" class="headerlink" title="System model"></a>System model</h3><ul>
+<li><p>能耗模型</p>
+<p>  这篇论文将问题场景中的总能耗分成两个方面：充电小车用于路径的能耗和用于传感器充电的能耗。</p>
+<script type="math/tex; mode=display">
+  C(X)=\sum_{d\in L^{T\mathrm{S}P}(X)}\alpha \cdot d +\sum_{v_{j}\in X}\beta\cdot(e_{j}-e_{j}^{r})</script><p>  其中$\alpha$表示一个长度单位的能耗，$\beta$表示给传感器充一个单位的能量需要充电小车传输$\beta$个单位能量，$d$是小车路径长度，$e_j-e^r_j$是传感器所需的充电能量。</p>
+</li>
+<li><p>任务效益模型</p>
+<p>  这篇论文定义了传感器对于任务的效益模型：</p>
+<script type="math/tex; mode=display">
+  u(t_{i},\ v_{j})=w_{ij}p_{ij}</script><p>  $w_{ij}$表示传感器$v_j$和任务$t_i$之间的权值，$p_{ij}$表示$v_j$对$t_i$的能量分配策略。</p>
+<p>  此外，每个任务存在一个效益上限$U_i$，所以对于任务$t_i$在传感器集合$X$内的总效益表示为：</p>
+<script type="math/tex; mode=display">
+  U(X,\displaystyle \ t_{i})=\min\{u_{X}({\it t_i}), U_{i}\}</script><p>  因此，这个传感器网络中的任务总效益为：</p>
+<script type="math/tex; mode=display">
+  U\left(X,\displaystyle \ P\right)=\sum_{i=1}^{n}U\left(X,\ t_{i}\right)=\sum_{i=1}^{n}\min\left\{u_{X}\left({\it t_i}\right), U_{i}\right\}</script><p>  其中矩阵$P$中的元素表示传感器对于每个任务的分配策略。</p>
+</li>
+</ul>
+<h3 id="Problem-formulation"><a href="#Problem-formulation" class="headerlink" title="Problem formulation"></a>Problem formulation</h3><p>通过上面的定义，最后将问题建模成<strong>CTMC</strong>问题如下形式：</p>
+<script type="math/tex; mode=display">
+\begin{array}{ll}{\text {  Max }} & {U(X, P)} \\ {\text { s.t. }} & {e_{j}-\sum_{t_{1} \in T} p_{i j} h_{j} \geq 0, \quad \forall v_{j} \in V} \\ { } & {\mathcal{C}(X) \leq E, \quad \forall X \subseteq V}\end{array}</script><p>该问题可分成两个子问题考虑：”Budget maximum coverage problem” 和 “Traveling salesman problem”，根据已有研究表明，这两个子问题都是NP-hard，因此原问题也是一个NP-hard问题。</p>
+<h2 id="3-Approach"><a href="#3-Approach" class="headerlink" title="3. Approach"></a>3. Approach</h2><p>这篇论文通过构造一个替代函数 $H(X)$ 来近似原目标函数U(X,P)，具体定义如下：</p>
+<script type="math/tex; mode=display">
+H_{X}(t_{i})=U(X,t_{i}) \\
+H(X)=U(X,P^{'})</script><p>其中$P^{‘}$表示近似的能量分配策略，具体的策略是采用贪心思想：对于每一个传感器，将能量按照权重$w_{ij}$比例分配给对应的任务。</p>
+<p>因为原问题还涉及到充电小车的路径规划问题可规约到经典的TSP问题，所以这里又采用了最邻近算法<a href="https://link.springer.com/chapter/10.1007%2F978-1-4020-9688-4_3" target="_blank" rel="noopener"><sup>1</sup></a>来近似最优解，即用$\hat C(X)$近似$C(X)$。</p>
+<p>根据证明可发现，函数$H(X)$满足子模函数的性质，同时也具有非负性和单调性。因此这篇论文根据2016年的相关工作<a href="http://www.aaai.org/ocs/index.php/AAAI/AAAI16/paper/view/11911" target="_blank" rel="noopener"><sup>2</sup></a>基础，采用贪心的近似算法，具体的算法如下：</p>
+<p><img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/RC.gif" alt></p>
+<p>RC-ratio贪心思想主要体现在每次选择的传感器节点都是当前使 <script type="math/tex">\frac {H(X_{j-1} \cup \{v\})-H(X_{j-1})}{\hat C(X_{j-1} \cup \{v\})-\hat C(X_{j-1})}</script> 值最大的那个节点。</p>
+<h2 id="4-Theoretical-analysis"><a href="#4-Theoretical-analysis" class="headerlink" title="4. Theoretical analysis"></a>4. Theoretical analysis</h2><p>对于替代函数$H(X)=U(X,P^{‘})$可以证明出是最优解$U(X,P)$的1/2。具体证明过程如图中的例子所示。</p>
+<p><img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/example.gif" alt></p>
+<p>而算法RC-ratio已经在[2]中被证明是存在一个(1-1/e)/2的近似，因此乘上函数$H(X)$的近似，最终的算法得到(1-1/e)/4的近似比。</p>
+<h2 id="5-Evaluation-amp-Experiment"><a href="#5-Evaluation-amp-Experiment" class="headerlink" title="5. Evaluation &amp; Experiment"></a>5. Evaluation &amp; Experiment</h2><h3 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h3><p><img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/overall task utility.gif"><br><img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/energy utilization efficience.gif"></p>
+<h3 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h3><ul>
+<li><p>Indoor</p>
+<p>  <img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/Indoor office room.gif" alt></p>
+</li>
+</ul>
+<p><img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/Overall task utility for indoor scenario.gif" alt="Overall task utility for indoor scenario" style="zoom:50%;"></p>
+<ul>
+<li>Outdoor</li>
+</ul>
+<p><img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/Outdoor soccer field.gif" alt></p>
+<p><img src="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/Overall task utility for outdoor scenario.gif" alt="Overall task utility for outdoor scenario" style="zoom:50%;"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>[1] <a href="https://link.springer.com/chapter/10.1007%2F978-1-4020-9688-4_3" target="_blank" rel="noopener">D. J. Rosenkrantz et al., “An analysis of several heuristics for the traveling salesman problem,” in Fundamental       Problems in Computing.Springer, 2009, pp. 45–69</a>.</li>
+<li>[2] <a href="http://www.aaai.org/ocs/index.php/AAAI/AAAI16/paper/view/11911" target="_blank" rel="noopener">H. Zhang et al., “Submodular optimization with routing constraints.” in AAAI, vol. 16, 2016, pp. 819–826.</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%85%85%E7%94%B5%E8%B0%83%E5%BA%A6/" rel="tag"># 移动充电调度</a>
+          
+            <a href="/tags/%E8%BF%91%E4%BC%BC%E7%AE%97%E6%B3%95/" rel="tag"># 近似算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/" rel="next" title="RouteNet: Leveraging Graph Neural Networks for Network Modeling and Optimization in SDN ">
+                <i class="fa fa-chevron-left"></i> RouteNet: Leveraging Graph Neural Networks for Network Modeling and Optimization in SDN 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">COOLA-LAB</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Background"><span class="nav-text">1. Background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-System-model-amp-Problem-formulation"><span class="nav-text">2. System model &amp; Problem formulation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#System-model"><span class="nav-text">System model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Problem-formulation"><span class="nav-text">Problem formulation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Approach"><span class="nav-text">3. Approach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Theoretical-analysis"><span class="nav-text">4. Theoretical analysis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Evaluation-amp-Experiment"><span class="nav-text">5. Evaluation &amp; Experiment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Evaluation"><span class="nav-text">Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Experiment"><span class="nav-text">Experiment</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">COOLA-LAB</span>
+
+  
+</div>
+
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
