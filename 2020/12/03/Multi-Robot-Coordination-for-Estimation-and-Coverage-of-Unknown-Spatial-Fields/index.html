@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="图神经网络,网络优化,SDN," />
+  <meta name="keywords" content="Gaussian Process,Environment Coverage," />
 
 
 
@@ -79,23 +79,24 @@
 
 
 
-<meta name="description" content="这篇论文提出了一种叫做RouteNet的方法，这是一种基于MPNN的新型网络模型，用于预测某种场景下的网络的特征矩阵，该模型能够了解拓扑，路由和输入流量之间的复杂关系，从而可以准确估算每个源&#x2F;目标每个数据包的KPI指标。 1. 问题描述一些相关概念 KPI—(Key performance Indicator) 时延（packet发送和接受的时间差），抖动（相邻packet时延的差值），丢包率（一">
+<meta name="description" content="这篇文章利用高斯过程来估计未知的标量场并同时联合优化机器人集群的最优覆盖，并且在理论上证明了该算法的no-regret性。 1.问题背景考虑机器人集群的规模为$n$,让该集群针对一个未知的源或者事件进行最优覆盖，每个机器人的管辖区域是基于Voronoi Partition的，即：  V_i&#x3D;\left \{q\in \mathbb{R}^2:\forall j\neq i \quad \left">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RouteNet: Leveraging Graph Neural Networks for Network Modeling and Optimization in SDN ">
-<meta property="og:url" content="http://yoursite.com/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/index.html">
+<meta property="og:title" content="Multi-Robot Coordination for Estimation and Coverage of Unknown Spatial Fields">
+<meta property="og:url" content="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/index.html">
 <meta property="og:site_name" content="COOLA-LAB">
-<meta property="og:description" content="这篇论文提出了一种叫做RouteNet的方法，这是一种基于MPNN的新型网络模型，用于预测某种场景下的网络的特征矩阵，该模型能够了解拓扑，路由和输入流量之间的复杂关系，从而可以准确估算每个源&#x2F;目标每个数据包的KPI指标。 1. 问题描述一些相关概念 KPI—(Key performance Indicator) 时延（packet发送和接受的时间差），抖动（相邻packet时延的差值），丢包率（一">
-<meta property="og:image" content="http://yoursite.com/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110220025370.png">
-<meta property="og:image" content="http://yoursite.com/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110224404481.png">
-<meta property="og:image" content="http://yoursite.com/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110231404662.png">
-<meta property="article:published_time" content="2020-11-11T00:43:27.000Z">
-<meta property="article:modified_time" content="2020-11-11T00:45:52.325Z">
+<meta property="og:description" content="这篇文章利用高斯过程来估计未知的标量场并同时联合优化机器人集群的最优覆盖，并且在理论上证明了该算法的no-regret性。 1.问题背景考虑机器人集群的规模为$n$,让该集群针对一个未知的源或者事件进行最优覆盖，每个机器人的管辖区域是基于Voronoi Partition的，即：  V_i&#x3D;\left \{q\in \mathbb{R}^2:\forall j\neq i \quad \left">
+<meta property="og:image" content="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/voronoi.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/algorithm.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp1.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp2.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp3.png">
+<meta property="article:published_time" content="2020-12-03T13:45:24.000Z">
+<meta property="article:modified_time" content="2020-12-03T13:50:19.202Z">
 <meta property="article:author" content="COOLA-LAB">
-<meta property="article:tag" content="图神经网络">
-<meta property="article:tag" content="网络优化">
-<meta property="article:tag" content="SDN">
+<meta property="article:tag" content="Gaussian Process">
+<meta property="article:tag" content="Environment Coverage">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110220025370.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/voronoi.png">
 
 
 
@@ -125,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/"/>
 
 
 
 
 
-  <title>RouteNet: Leveraging Graph Neural Networks for Network Modeling and Optimization in SDN  | COOLA-LAB</title>
+  <title>Multi-Robot Coordination for Estimation and Coverage of Unknown Spatial Fields | COOLA-LAB</title>
   
 
 
@@ -258,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="COOLA-LAB">
@@ -275,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">RouteNet: Leveraging Graph Neural Networks for Network Modeling and Optimization in SDN </h1>
+          <h1 class="post-title" itemprop="name headline">Multi-Robot Coordination for Estimation and Coverage of Unknown Spatial Fields</h1>
         
 
         <div class="post-meta">
@@ -287,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-11T08:43:27+08:00">
-                2020-11-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-03T21:45:24+08:00">
+                2020-12-03
               </time>
             
 
@@ -352,42 +353,37 @@
       
 
       
-        <p>这篇论文提出了一种叫做RouteNet的方法，这是一种基于MPNN的新型网络模型，用于预测某种场景下的网络的特征矩阵，该模型能够了解拓扑，路由和输入流量之间的复杂关系，从而可以准确估算每个源/目标每个数据包的KPI指标。</p>
-<h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1. 问题描述"></a>1. 问题描述</h2><h3 id="一些相关概念"><a href="#一些相关概念" class="headerlink" title="一些相关概念"></a>一些相关概念</h3><ul>
-<li>KPI—(Key performance Indicator)<ul>
-<li>时延（packet发送和接受的时间差），抖动（相邻packet时延的差值），丢包率（一段时间内丢失的packet比例）等一些描述网络性能的指标，具体可以由一个邻接矩阵矩阵来表示每个节点对之间的一段时间内的平均表现。</li>
-</ul>
-</li>
-<li>网络优化—(Network optimization)<ul>
-<li>进行一系列操作使得网络的性能提升</li>
-<li>网络优化可以分为两部分循环迭代：1）通过网络模型获取量化的网络性能指标，2）将量化的指标输入优化器获得结果</li>
-</ul>
-</li>
-<li>网络模型—(Network modeling)<ul>
-<li>网络优化首先要能度量网络的性能（“<em>we can only optimize what we can model.</em> ”），网络模型就是负责量化网络的目前性能</li>
-<li>主流的做法有两个：数学模型（主要是基于排队论的基础—特点是精度低但是速度快）、仿真器（能获得精确的结果，但是仿真速度比较慢）</li>
-</ul>
-</li>
-</ul>
-<p>在SDN网络结构中<img src="/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110220025370.png" alt="image-20201110220025370">，如图所示可以实时获取全局的网络信息，从而进行优化，以达到相应的优化目标，左边部分为数据面板，右边部分为控制面板，整个网络优化的过程就可以部署在控制面板中。</p>
-<h3 id="本文主要解决问题"><a href="#本文主要解决问题" class="headerlink" title="本文主要解决问题"></a>本文主要解决问题</h3><p>文章主要是利用MPNN的思想建立了一个监督学习的神经网络用来预测网络的KPI指标，监督的样本来自仿真器的Ground-Truth，最后训练出来的模型具有应对类似拓扑的泛化能力以及实验证明可靠的精度。</p>
-<p>换言之，主要就是用AI代替了传统网络优化过程中的网络KPI量化这一步骤。</p>
-<h2 id="2-主要思想"><a href="#2-主要思想" class="headerlink" title="2. 主要思想"></a>2. 主要思想</h2><h3 id="MPNN-Message-Passing-Neural-Network-—通用GCN框架"><a href="#MPNN-Message-Passing-Neural-Network-—通用GCN框架" class="headerlink" title="MPNN(Message-Passing Neural Network)—通用GCN框架"></a>MPNN(Message-Passing Neural Network)—通用GCN框架</h3><p>文章作者表示，方法的主要思想起源于MPNN（Gilmer J, Schoenholz S S, Riley P F, et al. Neural message passing for quantum chemistry[J]. arXiv preprint arXiv:1704.01212, 2017.），这篇文章里主要概括了之前的主要GCN模型，并抽象出一个普适的GCN框架，这个框架将GCN网络分为三部分：</p>
-<ol>
-<li>Message Passing</li>
-<li>State Update</li>
-<li>Readout</li>
-</ol>
-<p>这边结合之前张凯学长的一篇<a href="https://coola-lab.github.io/2020/09/20/Inductive-Representation-Learning-on-Large-Graphs/" target="_blank" rel="noopener">组会报告</a>来解释这个框架，这篇报告的文章提出了一个GraphSAGE的方法，算法过程如下：<img src="/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110224404481.png" alt></p>
-<p>算法过程中标出的部分即为三个MPNN的三个步骤。</p>
-<p>GCN的贡献就在于能提取出传统网络的拓扑信息，然后进行接下来的分类回归等操作。</p>
-<h3 id="RouteNet"><a href="#RouteNet" class="headerlink" title="RouteNet"></a>RouteNet</h3><p>一个packet传输经过若干条链路，所有链路的集合称之为路径，作者的模型基于以下的原则：</p>
-<ol>
-<li>每个路径的状态取决于所有链路的状态</li>
-<li>一个链路的状态取决于所有经过这条链路的路径的状态</li>
-</ol>
-<h2 id="3-方法"><a href="#3-方法" class="headerlink" title="3. 方法"></a>3. 方法</h2><p>算法过程如下图所示：<img src="/2020/11/11/RouteNet-Leveraging-Graph-Neural-Networks-for-Network-Modeling-and-Optimization-in-SDN/image-20201110231404662.png" alt="image-20201110231404662"></p>
-<p>首先初始化路径和各个链路的初始状态，接着对每个链路和路径进行Message Passing 操作，最后再进行readout操作，通过反向传播进行学习。</p>
+        <p>这篇文章利用高斯过程来估计未知的标量场并同时联合优化机器人集群的最优覆盖，并且在理论上证明了该算法的no-regret性。</p>
+<h2 id="1-问题背景"><a href="#1-问题背景" class="headerlink" title="1.问题背景"></a>1.问题背景</h2><p><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/voronoi.png" style="zoom:80%;" align="center"><br>考虑机器人集群的规模为$n$,让该集群针对一个未知的源或者事件进行最优覆盖，每个机器人的管辖区域是基于Voronoi Partition的，即：</p>
+<script type="math/tex; mode=display">
+V_i=\left \{q\in \mathbb{R}^2:\forall j\neq i \quad \left \| q-x_i\right \|_2\leqslant \left \| q-x_j\right \|_2\right \}</script><p>该$V_i$就是机器人$x_i$的管辖区域，也叫Voronoi cell.但是机器人在监测自己周围环境的时候，监测性能会与其到监测点之间的距离成反比，因而可以定义Locational Cost为：</p>
+<script type="math/tex; mode=display">
+l(\phi,x)=\sum_{i=1}^{n}\int _{q\in V_i}\left \| q-x_i\right \|_2^2\phi(q)dq</script><p>为了使Locational Cost最小，可以让机器人处于其管辖区域的重心位置上，即：</p>
+<script type="math/tex; mode=display">
+c_i(\phi)=\frac{1}{\int _{V_i}\phi(q)dq}\int _{V_i}q\phi(q)dq</script><p>但是该问题背景下，真实的$\phi$是未知的，只能利用集群已经采集到的数据来不断地估计$\phi^{(t)}$,这样便可以将集群部署到最优的位置上。机器人在所处位置上采集到的数据符合下面的模型：</p>
+<script type="math/tex; mode=display">
+y=\phi(x_i)+\varepsilon</script><p>即采集到的数据是真实数据再加上一定的噪声，这个噪声是服从高斯分布的。</p>
+<h2 id="2-算法设计："><a href="#2-算法设计：" class="headerlink" title="2.算法设计："></a>2.算法设计：</h2><p>本文利用高斯过程来估计density function，一个高斯过程由其均值函数和核函数唯一确定，为了更好的估计，本文为均值函数和核函数均引入了可调节的超参数,再利用极大似然估计法来更新这两个超参数，即：</p>
+<script type="math/tex; mode=display">
+(\rho ^{(t)},\tau ^{(t)})=argmin_{\rho,\tau}p(y^{(1:t)}|x^{(1:t)};\rho;\tau)</script><p>其中，$x^{(1:t)}$是所有机器人在$t$时刻行走过的路径点，$y^{(1:t)}$则是相应的观测值，$\rho,\tau$分别是该高斯过程中均值函数和景象基函数的超参数也是待优化变量。该优化问题的求解可以使用传统的梯度下降法。<br>当确定了$t$时刻的超参数，便可以利用高斯过程对平面上任一一点的信号强度值进行估计，并平面上每一点的信号强度值也属于一个高斯分布，其均值为：</p>
+<script type="math/tex; mode=display">
+u^{(t)}(x)=u(x;\rho^{(t)})+k(x;x^{(1:t)})^T(K_{x^{(1:t)}}(\tau^{(t)})+\sigma^2I)^{-1
+}(y^{(1:t)}-u^{(1:t)}(\rho^{(t)}))</script><p>方差为：</p>
+<script type="math/tex; mode=display">
+\sigma(t)=k(x,x,\tau^{(t)})-k(x,x^{(1:t)},\tau^{(t)})^T(K_{x^{(1:t)}}(\tau^{(t)})+\sigma^2I)^{-1
+}k(x,x^{(1:t)},\tau^{(t)})</script><p>有了均值和方差后，就可以利用生成相应的代理函数值，传统的GP-UCB算法取置信上界作为代理函数值，而本文采用置信下界作为代理函数值，正因为这个小的改动，却能为理论上的no-regret证明提供了支撑。代理函数的计算如下：</p>
+<script type="math/tex; mode=display">
+\phi^{(t)}=u^{(t-1)}(q)-\sqrt{\beta ^{(t)}}\sigma^{(t-1)}(q)</script><p>其中$\beta ^{(t)}$是在$\delta$置信度下的一个bound，具体为：</p>
+<script type="math/tex; mode=display">
+\beta^{(t)}=2log(|D|t^2\frac{\pi ^2}{6\delta})</script><p>基于以上的原则，该算法的具体流程如下：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/algorithm.png" style="zoom:90%;"></p>
+<h2 id="3-理论分析："><a href="#3-理论分析：" class="headerlink" title="3.理论分析："></a>3.理论分析：</h2><p>定义regret为：</p>
+<script type="math/tex; mode=display">
+r^{(t)}=l(\phi,x^{(t)})-min_xl(\phi,x)\geqslant 0</script><p>其含义就是值$t$时刻机器人集群所处位置造成的Locational Cost和最优部署之间的差值。所以要证明的是累计误差是次线性的，即：</p>
+<script type="math/tex; mode=display">
+lim_{T\rightarrow \infty }\frac{R_T}{T}=0</script><p>本文构造了一个非常重要的不等式为：</p>
+<script type="math/tex; mode=display">
+l(\phi^{(t),x^{(t)}})\leqslant l(\phi^{(t)},x^*)\leqslant l(\phi,x^*)</script><p>其中$x^*$是指假设$\phi$下的最优位置部署，不等式中的第二项很关键，因为本文采用了置信下界作为代理函数的值，所以不等式成立，而第一项是指$t$时刻估计的$\phi^{(t)}$的前提下的最优部署，故等式成立，之后再通过证明density function利用已获得数据后不确定性减少是有上下界的，而其中上界是此线性，下界又包含在$r_t^2$中，最后再利用柯西不等式证明了该算法的no-regret性。</p>
+<h2 id="4-实验结果："><a href="#4-实验结果：" class="headerlink" title="4.实验结果："></a>4.实验结果：</h2><p>本文分别在真实机器和仿真环境上进行了实验，效果如下所示：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp1.png" style="zoom:80%;"><br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp2.png" style="zoom:80%;"><br>同时也追踪了该算法在不同时刻下的Locational Cost的大小,结果如下所示：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp3.png" style="zoom:80%;"><br>可以看出该算法在性能上比GP_UCB算法稍差，但是他为该算法的性能提供了理论上的证明保证。</p>
 
       
     </div>
@@ -405,11 +401,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"># 图神经网络</a>
+            <a href="/tags/Gaussian-Process/" rel="tag"># Gaussian Process</a>
           
-            <a href="/tags/%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96/" rel="tag"># 网络优化</a>
-          
-            <a href="/tags/SDN/" rel="tag"># SDN</a>
+            <a href="/tags/Environment-Coverage/" rel="tag"># Environment Coverage</a>
           
         </div>
       
@@ -422,8 +416,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/10/26/SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines/" rel="next" title="SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines">
-                <i class="fa fa-chevron-left"></i> SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines
+              <a href="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/" rel="next" title="Collaborated Tasks-driven Mobile Charging and Scheduling: A Near Optimal Result">
+                <i class="fa fa-chevron-left"></i> Collaborated Tasks-driven Mobile Charging and Scheduling: A Near Optimal Result
               </a>
             
           </div>
@@ -431,10 +425,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/" rel="prev" title="Collaborated Tasks-driven Mobile Charging and Scheduling: A Near Optimal Result">
-                Collaborated Tasks-driven Mobile Charging and Scheduling: A Near Optimal Result <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -566,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-问题描述"><span class="nav-text">1. 问题描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一些相关概念"><span class="nav-text">一些相关概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本文主要解决问题"><span class="nav-text">本文主要解决问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-主要思想"><span class="nav-text">2. 主要思想</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MPNN-Message-Passing-Neural-Network-—通用GCN框架"><span class="nav-text">MPNN(Message-Passing Neural Network)—通用GCN框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RouteNet"><span class="nav-text">RouteNet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-方法"><span class="nav-text">3. 方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-问题背景"><span class="nav-text">1.问题背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-算法设计："><span class="nav-text">2.算法设计：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-理论分析："><span class="nav-text">3.理论分析：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-实验结果："><span class="nav-text">4.实验结果：</span></a></li></ol></div>
             
 
           </div>

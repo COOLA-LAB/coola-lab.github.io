@@ -248,6 +248,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/" itemprop="url">Multi-Robot Coordination for Estimation and Coverage of Unknown Spatial Fields</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-03T21:45:24+08:00">
+                2020-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇文章利用高斯过程来估计未知的标量场并同时联合优化机器人集群的最优覆盖，并且在理论上证明了该算法的no-regret性。</p>
+<h2 id="1-问题背景"><a href="#1-问题背景" class="headerlink" title="1.问题背景"></a>1.问题背景</h2><p><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/voronoi.png" style="zoom:80%;" align="center"><br>考虑机器人集群的规模为$n$,让该集群针对一个未知的源或者事件进行最优覆盖，每个机器人的管辖区域是基于Voronoi Partition的，即：</p>
+<script type="math/tex; mode=display">
+V_i=\left \{q\in \mathbb{R}^2:\forall j\neq i \quad \left \| q-x_i\right \|_2\leqslant \left \| q-x_j\right \|_2\right \}</script><p>该$V_i$就是机器人$x_i$的管辖区域，也叫Voronoi cell.但是机器人在监测自己周围环境的时候，监测性能会与其到监测点之间的距离成反比，因而可以定义Locational Cost为：</p>
+<script type="math/tex; mode=display">
+l(\phi,x)=\sum_{i=1}^{n}\int _{q\in V_i}\left \| q-x_i\right \|_2^2\phi(q)dq</script><p>为了使Locational Cost最小，可以让机器人处于其管辖区域的重心位置上，即：</p>
+<script type="math/tex; mode=display">
+c_i(\phi)=\frac{1}{\int _{V_i}\phi(q)dq}\int _{V_i}q\phi(q)dq</script><p>但是该问题背景下，真实的$\phi$是未知的，只能利用集群已经采集到的数据来不断地估计$\phi^{(t)}$,这样便可以将集群部署到最优的位置上。机器人在所处位置上采集到的数据符合下面的模型：</p>
+<script type="math/tex; mode=display">
+y=\phi(x_i)+\varepsilon</script><p>即采集到的数据是真实数据再加上一定的噪声，这个噪声是服从高斯分布的。</p>
+<h2 id="2-算法设计："><a href="#2-算法设计：" class="headerlink" title="2.算法设计："></a>2.算法设计：</h2><p>本文利用高斯过程来估计density function，一个高斯过程由其均值函数和核函数唯一确定，为了更好的估计，本文为均值函数和核函数均引入了可调节的超参数,再利用极大似然估计法来更新这两个超参数，即：</p>
+<script type="math/tex; mode=display">
+(\rho ^{(t)},\tau ^{(t)})=argmin_{\rho,\tau}p(y^{(1:t)}|x^{(1:t)};\rho;\tau)</script><p>其中，$x^{(1:t)}$是所有机器人在$t$时刻行走过的路径点，$y^{(1:t)}$则是相应的观测值，$\rho,\tau$分别是该高斯过程中均值函数和景象基函数的超参数也是待优化变量。该优化问题的求解可以使用传统的梯度下降法。<br>当确定了$t$时刻的超参数，便可以利用高斯过程对平面上任一一点的信号强度值进行估计，并平面上每一点的信号强度值也属于一个高斯分布，其均值为：</p>
+<script type="math/tex; mode=display">
+u^{(t)}(x)=u(x;\rho^{(t)})+k(x;x^{(1:t)})^T(K_{x^{(1:t)}}(\tau^{(t)})+\sigma^2I)^{-1
+}(y^{(1:t)}-u^{(1:t)}(\rho^{(t)}))</script><p>方差为：</p>
+<script type="math/tex; mode=display">
+\sigma(t)=k(x,x,\tau^{(t)})-k(x,x^{(1:t)},\tau^{(t)})^T(K_{x^{(1:t)}}(\tau^{(t)})+\sigma^2I)^{-1
+}k(x,x^{(1:t)},\tau^{(t)})</script><p>有了均值和方差后，就可以利用生成相应的代理函数值，传统的GP-UCB算法取置信上界作为代理函数值，而本文采用置信下界作为代理函数值，正因为这个小的改动，却能为理论上的no-regret证明提供了支撑。代理函数的计算如下：</p>
+<script type="math/tex; mode=display">
+\phi^{(t)}=u^{(t-1)}(q)-\sqrt{\beta ^{(t)}}\sigma^{(t-1)}(q)</script><p>其中$\beta ^{(t)}$是在$\delta$置信度下的一个bound，具体为：</p>
+<script type="math/tex; mode=display">
+\beta^{(t)}=2log(|D|t^2\frac{\pi ^2}{6\delta})</script><p>基于以上的原则，该算法的具体流程如下：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/algorithm.png" style="zoom:90%;"></p>
+<h2 id="3-理论分析："><a href="#3-理论分析：" class="headerlink" title="3.理论分析："></a>3.理论分析：</h2><p>定义regret为：</p>
+<script type="math/tex; mode=display">
+r^{(t)}=l(\phi,x^{(t)})-min_xl(\phi,x)\geqslant 0</script><p>其含义就是值$t$时刻机器人集群所处位置造成的Locational Cost和最优部署之间的差值。所以要证明的是累计误差是次线性的，即：</p>
+<script type="math/tex; mode=display">
+lim_{T\rightarrow \infty }\frac{R_T}{T}=0</script><p>本文构造了一个非常重要的不等式为：</p>
+<script type="math/tex; mode=display">
+l(\phi^{(t),x^{(t)}})\leqslant l(\phi^{(t)},x^*)\leqslant l(\phi,x^*)</script><p>其中$x^*$是指假设$\phi$下的最优位置部署，不等式中的第二项很关键，因为本文采用了置信下界作为代理函数的值，所以不等式成立，而第一项是指$t$时刻估计的$\phi^{(t)}$的前提下的最优部署，故等式成立，之后再通过证明density function利用已获得数据后不确定性减少是有上下界的，而其中上界是此线性，下界又包含在$r_t^2$中，最后再利用柯西不等式证明了该算法的no-regret性。</p>
+<h2 id="4-实验结果："><a href="#4-实验结果：" class="headerlink" title="4.实验结果："></a>4.实验结果：</h2><p>本文分别在真实机器和仿真环境上进行了实验，效果如下所示：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp1.png" style="zoom:80%;"><br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp2.png" style="zoom:80%;"><br>同时也追踪了该算法在不同时刻下的Locational Cost的大小,结果如下所示：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp3.png" style="zoom:80%;"><br>可以看出该算法在性能上比GP_UCB算法稍差，但是他为该算法的性能提供了理论上的证明保证。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/26/Collaborated-Tasks-driven-Mobile-Charging-and-Scheduling-A-Near-Optimal-Result/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2004,166 +2176,6 @@ F(x ;\mu, \sigma)=\frac{1}{\sigma \sqrt{2\pi}}\int^{\infty}_{x} \text{exp } (-\f
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="COOLA-LAB">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="COOLA-LAB">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/08/03/Weakly-Supervised-Semantic-Segmentation-with-Boundary-Exploration/" itemprop="url">Weakly Supervised Semantic Segmentation with Boundary Exploration</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-03T19:57:08+08:00">
-                2020-08-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">每周一会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="1-问题定位"><a href="#1-问题定位" class="headerlink" title="1 问题定位"></a>1 问题定位</h2><p>语义分割作为经典的计算机视觉的问题，从15年的FCN到之后的deeplab等，语义分割模型在自动驾驶，场景理解等场景都有较多的应该场景，同时也对神经网络的解释性产生一定的促进作用。对于输入的RGB图像或者灰度图，模型需要能够输出特定类别的区域，对于未设置的类别均作为背景处理。但是经典的语义分割模型都是使用像素级别的标签做监督，而这种标签在标注时非常耗时耗力，因为大家开始尝试使用弱监督(低于像素级别的监督)来完成语义分割任务，常见的弱监督包括：bounding box / scribble / image-level，本文也是基于image-level，图像级别的标签作为监督。该监督最为常见且监督级别最低，难度也较大。</p>
-<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2 相关工作"></a>2 相关工作</h2><p>大部分文章的解决思路是使用localization技术获取物体的初始位置信息，之后通过策略将初始定位结果进行优化。可以视为两阶段的localization-coarse。<br>localization方面，经典的技术包括saliency detection和CAM:</p>
-<ul>
-<li>CAM是使用全卷积网络提取特征，之后使用20个1x1的卷积核过滤，在将20张特征图通过GAP转换为20个标量值，使用多标签损失函数训练之后，20张特征图就对应20个类别的激活图。</li>
-<li>saliency map是将分类模型的梯度反向传播回原图得到高激活值的区域即对应类别的位置。在反向传播的过程中，如果一个节点正向传播时没有激活，那么该节点不进行反向传播的梯度传递。<br>  coarse方面:</li>
-<li>实现思路各式各样，不过主要要解决的问题是localization的定位面积过小，所以很多工作聚焦在鼓励类别区域扩撒，同时扩散的过程中保持边界性(由CRF完成)。</li>
-</ul>
-<h2 id="3-文章工作"><a href="#3-文章工作" class="headerlink" title="3 文章工作"></a>3 文章工作</h2><p>对于CAM进行了改进，提出了attention-pooling CAM。</p>
-<ul>
-<li>全卷积网络之后得到20张特征图$F_c$，对于每张$F_c$得各个位置，乘以参数$k$之后过一层softmax，得到attention map$A_c$。最终对应类别的置信度为特征图与attention map对应位置相乘后相加的值$P_c = \sum(F_c\times A_c)$</li>
-<li>在梯度更新的反向传播时，attention map部分的梯度不进行传递。</li>
-<li>训练收敛后的$F_c$即对应类别定位图。</li>
-</ul>
-<p>对于优化部分，目标是显式的预测类别的边界，通过规则将attention-pooling CAM的结果进行过滤，得到少量的标签正样本和较多的负样本以及无关的标签(不参与训练)。</p>
-<ul>
-<li>构造一个网络用于预测物体边界，属于边界二分类网络。训练数据使用从CAM合成得到的标签数据，损失函数方面由于样本的不均衡性所以做了归一化。如下<script type="math/tex; mode=display">L_{B}=-\sum_{i \in \Phi_{b r y}} \frac{W_{i} \log \left(P_{i}\right)}{\left|\Phi_{b r y}\right|}-\frac{1}{2}\left(\sum_{i \in \Phi_{c}} \frac{\log \left(1-P_{i}\right)}{\left|\Phi_{c}\right|}+\sum_{i \in \Phi_{b g}} \frac{\log \left(1-P_{i}\right)}{\left|\Phi_{b g}\right|}\right)</script></li>
-<li>通过训练更多的类别边界得到挖掘，之后使用IRNet文章的工作，将边界图转换为亲和度矩阵，计算每个位置与其邻近像素之间的亲和度关系，作为概率转移矩阵，模拟随机游走扩散，对CAM的结果进行优化。</li>
-</ul>
-<p>经过优化之后，segmentation的结果就比较不错了，之后使用类似retrain的思路，将生成的语义分割结果和原图以全监督的方式训练deeplab模型，以得到最终的结果。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2214,7 +2226,7 @@ F(x ;\mu, \sigma)=\frac{1}{\sigma \sqrt{2\pi}}\int^{\infty}_{x} \text{exp } (-\f
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2236,7 +2248,7 @@ F(x ;\mu, \sigma)=\frac{1}{\sigma \sqrt{2\pi}}\int^{\infty}_{x} \text{exp } (-\f
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
