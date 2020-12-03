@@ -351,7 +351,7 @@ l(\phi,x)=\sum_{i=1}^{n}\int _{q\in V_i}\left \| q-x_i\right \|_2^2\phi(q)dq</sc
 c_i(\phi)=\frac{1}{\int _{V_i}\phi(q)dq}\int _{V_i}q\phi(q)dq</script><p>但是该问题背景下，真实的$\phi$是未知的，只能利用集群已经采集到的数据来不断地估计$\phi^{(t)}$,这样便可以将集群部署到最优的位置上。机器人在所处位置上采集到的数据符合下面的模型：</p>
 <script type="math/tex; mode=display">
 y=\phi(x_i)+\varepsilon</script><p>即采集到的数据是真实数据再加上一定的噪声，这个噪声是服从高斯分布的。</p>
-<h2 id="2-算法设计："><a href="#2-算法设计：" class="headerlink" title="2.算法设计："></a>2.算法设计：</h2><p>本文利用高斯过程来估计density function，一个高斯过程由其均值函数和核函数唯一确定，为了更好的估计，本文为均值函数和核函数均引入了可调节的超参数,再利用极大似然估计法来更新这两个超参数，即：</p>
+<h2 id="2-算法设计"><a href="#2-算法设计" class="headerlink" title="2.算法设计"></a>2.算法设计</h2><p>本文利用高斯过程来估计density function，一个高斯过程由其均值函数和核函数唯一确定，为了更好的估计，本文为均值函数和核函数均引入了可调节的超参数,再利用极大似然估计法来更新这两个超参数，即：</p>
 <script type="math/tex; mode=display">
 (\rho ^{(t)},\tau ^{(t)})=argmin_{\rho,\tau}p(y^{(1:t)}|x^{(1:t)};\rho;\tau)</script><p>其中，$x^{(1:t)}$是所有机器人在$t$时刻行走过的路径点，$y^{(1:t)}$则是相应的观测值，$\rho,\tau$分别是该高斯过程中均值函数和景象基函数的超参数也是待优化变量。该优化问题的求解可以使用传统的梯度下降法。<br>当确定了$t$时刻的超参数，便可以利用高斯过程对平面上任一一点的信号强度值进行估计，并平面上每一点的信号强度值也属于一个高斯分布，其均值为：</p>
 <script type="math/tex; mode=display">
@@ -364,14 +364,14 @@ u^{(t)}(x)=u(x;\rho^{(t)})+k(x;x^{(1:t)})^T(K_{x^{(1:t)}}(\tau^{(t)})+\sigma^2I)
 \phi^{(t)}=u^{(t-1)}(q)-\sqrt{\beta ^{(t)}}\sigma^{(t-1)}(q)</script><p>其中$\beta ^{(t)}$是在$\delta$置信度下的一个bound，具体为：</p>
 <script type="math/tex; mode=display">
 \beta^{(t)}=2log(|D|t^2\frac{\pi ^2}{6\delta})</script><p>基于以上的原则，该算法的具体流程如下：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/algorithm.png" style="zoom:90%;"></p>
-<h2 id="3-理论分析："><a href="#3-理论分析：" class="headerlink" title="3.理论分析："></a>3.理论分析：</h2><p>定义regret为：</p>
+<h2 id="3-理论分析"><a href="#3-理论分析" class="headerlink" title="3.理论分析"></a>3.理论分析</h2><p>定义regret为：</p>
 <script type="math/tex; mode=display">
 r^{(t)}=l(\phi,x^{(t)})-min_xl(\phi,x)\geqslant 0</script><p>其含义就是值$t$时刻机器人集群所处位置造成的Locational Cost和最优部署之间的差值。所以要证明的是累计误差是次线性的，即：</p>
 <script type="math/tex; mode=display">
 lim_{T\rightarrow \infty }\frac{R_T}{T}=0</script><p>本文构造了一个非常重要的不等式为：</p>
 <script type="math/tex; mode=display">
 l(\phi^{(t),x^{(t)}})\leqslant l(\phi^{(t)},x^*)\leqslant l(\phi,x^*)</script><p>其中$x^*$是指假设$\phi$下的最优位置部署，不等式中的第二项很关键，因为本文采用了置信下界作为代理函数的值，所以不等式成立，而第一项是指$t$时刻估计的$\phi^{(t)}$的前提下的最优部署，故等式成立，之后再通过证明density function利用已获得数据后不确定性减少是有上下界的，而其中上界是此线性，下界又包含在$r_t^2$中，最后再利用柯西不等式证明了该算法的no-regret性。</p>
-<h2 id="4-实验结果："><a href="#4-实验结果：" class="headerlink" title="4.实验结果："></a>4.实验结果：</h2><p>本文分别在真实机器和仿真环境上进行了实验，效果如下所示：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp1.png" style="zoom:80%;"><br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp2.png" style="zoom:80%;"><br>同时也追踪了该算法在不同时刻下的Locational Cost的大小,结果如下所示：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp3.png" style="zoom:80%;"><br>可以看出该算法在性能上比GP_UCB算法稍差，但是他为该算法的性能提供了理论上的证明保证。</p>
+<h2 id="4-实验结果"><a href="#4-实验结果" class="headerlink" title="4.实验结果"></a>4.实验结果</h2><p>本文分别在真实机器和仿真环境上进行了实验，效果如下所示：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp1.png" style="zoom:80%;"><br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp2.png" style="zoom:80%;"><br>同时也追踪了该算法在不同时刻下的Locational Cost的大小,结果如下所示：<br><img src="/2020/12/03/Multi-Robot-Coordination-for-Estimation-and-Coverage-of-Unknown-Spatial-Fields/exp3.png" style="zoom:80%;"><br>可以看出该算法在性能上比GP_UCB算法稍差，但是他为该算法的性能提供了理论上的证明保证。</p>
 
           
         
