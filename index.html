@@ -248,6 +248,273 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/" itemprop="url">Decentralized Patrolling Under Constraints in Dynamic Environments</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-16T15:45:00+08:00">
+                2021-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>作者研究了一个考虑信息与威胁分布的基于动态环境的分散巡逻问题。在这个问题中，代理可以在某个位置获取信息，但同时可能会受到该位置威胁的攻击。每个代理以分散的方式在环境中的指定区域巡逻，并与有限数量的代理进行交互。这些代理的目标是相互协调以收集尽可能多的信息，同时限制所受到的损害。因此，作者将这类问题建模为具有健康约束的部分可观测的马尔可夫决策过程。此外，作者提出了基于蒙特卡罗树搜索和因子置信向量的可伸缩分散在线算法。
+本次组会将由该论文展开，简略地讲述如何使用传统的组合优化算法来有效地解决一种具有可分状态及可分价值函数结构特性的复杂强化学习任务。这份简报将按照组会slides的顺序讲述，并为感兴趣的同学补充更多的细节。
+</code></pre><h2 id="1-Environments"><a href="#1-Environments" class="headerlink" title="1. Environments"></a>1. Environments</h2><h3 id="1-1-Patrolling-Environments"><a href="#1-1-Patrolling-Environments" class="headerlink" title="1.1 Patrolling Environments"></a>1.1 Patrolling Environments</h3><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt2.PNG" alt="ppt2"></p>
+<p>这篇论文将巡逻环境建模为一个<strong>无向图</strong>$G$，并将任务限制在$T$个时间片内。</p>
+<p>每个节点$v$有一个状态，其所处的状态可以用两个互相独立的<strong>状态变量</strong>$e_v^R$及$e_v^I$表示。</p>
+<p>在这个包含<strong>不确定性</strong>的任务环境下，我们通常<strong>无法确定节点所处的状态</strong>，相反，我们实际使用<strong>信念向量$w_v^R/w_v^I$表示/评估节点处于各个状态概率</strong>。</p>
+<p>为了描述环境的动态性，我们假定环境的<strong>状态转移模型</strong>是一个简单的马尔可夫模型，各个节点的两个状态的转移都两两<strong>互相独立</strong>。转移矩阵$P$了描述了某个节点的信息状态/威胁状态在一个转移到另一个状态的概率。</p>
+<p>右边给出了一个例子。</p>
+<h3 id="1-2-Patrolling-Agents"><a href="#1-2-Patrolling-Agents" class="headerlink" title="1.2 Patrolling Agents"></a>1.2 Patrolling Agents</h3><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt3.PNG" alt="ppt3"></p>
+<p>作为完成任务的主体，代理包含有限个成员。</p>
+<p>每个代理$A_i$有<strong>其固定的巡逻区域</strong>，每个代理有着<strong>健康约束</strong>，这意味着一个可以正常工作的代理受到的威胁的线性加和不能超过上线$\beta_m$。</p>
+<p>每个可以正常工作的代理在每个时间片可以执行的动作是从其所在的节点$v$前往$G$中的相邻节点或是停留在$v$。这个移动不能超出其巡逻范围$g_m$</p>
+<p>每个时间片，整个系统获得的收益由<strong>各个代理所处的节点的信息价值共同决定</strong>。函数$\alpha(n)$描述了代理在同一个节点执行任务的合作能力，即$n$个代理能获得收益的比例。通常有：$\alpha(n)$是单调增函数且满足$\lim_{n\rightarrow\infty}\alpha(n)=1，\alpha(0)=0$。</p>
+<p>我们定义邻居关系是巡逻区域有重叠的一对代理。一个代理的<strong>邻居集合</strong>由其所有邻居组成。信息<strong>通信仅被允许在邻居间进行</strong>。</p>
+<h2 id="2-MCTS"><a href="#2-MCTS" class="headerlink" title="2. MCTS"></a>2. MCTS</h2><p>MCTS是关注少量状态价值的一种有效地在线表格型学习方法。</p>
+<p>通过使用<strong>蒙特卡洛模拟</strong>评估关注状态的后续状态价值，并使用<strong>UCB算法</strong>有效地选择需要评估地后续状态。整个过程在一个不平衡的搜索树上完成，因此得名。</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt4.PNG" alt="ppt4"></p>
+<p>通常，MCT中每个节点代表一个状态$s$,或是由历史轨迹$h$产生的可达状态集$S(h)$。</p>
+<p>每个节点至少需要维护节点的访问次数$N$,以及当前的评估价值$Q$。</p>
+<p>树上的一条边表示动作或是观察，表示状态在观察或动作后到达一个新的状态集$S(h)$。</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt5.PNG" alt="ppt5"></p>
+<p>MCTS算法的主要流程包含四个部分：</p>
+<ul>
+<li><strong>选择</strong>：自顶向下，每次选择UCB值最大的子节点直到一个子节点未完全拓展的节点。</li>
+<li><strong>拓展</strong>：选择该节点一个未拓展的子节点进行拓展。</li>
+<li><strong>模拟</strong>：通过快速模拟给予拓展节点一个初始状态价值。</li>
+<li><strong>反向传播</strong>：使用模拟价值，更新所有前驱状态的价值。</li>
+</ul>
+<p>通过不断地执行上述四步，最终，各个节点的状态价值会收敛到最优值。</p>
+<p>限于篇幅，这里只能简单地介绍。作者建议仍然不了解的读者阅读David的<em>Monte-Carlo Planning in Large POMDPs</em>原文或其他相关材料，以便可以更好地理解后续内容。</p>
+<h2 id="3-Main-Idea"><a href="#3-Main-Idea" class="headerlink" title="3. Main Idea"></a>3. Main Idea</h2><h3 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h3><p>MCTS的主要瓶颈在于，其要获得足够准确的评估，需要对后续足够多的状态进行评估，而在一个多agent且多阶段的任务中，可能的<strong>后续状态空间过大</strong>，以至于无法实现充足的采样，进而导致评估误差过大。</p>
+<p>例如，对于$k$个代理，每个代理动作空间大小为$|A|$，观测空间大小$|O|$,则一步后的可能状态空间大小就有$(|O||A|)^k$,对应于搜索树上就是巨大的分支因子。这对于基于采样的树搜索方法是难以接受的。</p>
+<p>本文的<strong>主要技术思路</strong>就是使用<strong>Factored state &amp; Factored value function</strong>来减少后续状态空间的大小，提高节点<strong>可重用性</strong>。</p>
+<p>原文中Theorem 1证明了这一问题具有这一性质。</p>
+<p>组会slides中给出了更加形式化地证明。</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt7.PNG" alt="ppt7"></p>
+<p>简而言之，这个性质，就是指<strong>系统总体状态价值$V(h)$可以由局部价值$V_m(h_{K_m})$求和得到。</strong></p>
+<p>其中，$h_{K_m}$表示代理$m$的邻居集合的<strong>共同联合历史</strong>。</p>
+<p>直观上讲，假设我们为了评估$V(h)$，使用一步后的所有后续状态。我们可能需要枚举共$(|O||A|)^k$的后续状态，以对$h$有一个更好地评估。有了这个性质后，我们可能只需要枚举$\frac{k}{|K_m|}(|O||A|)^{|K_m|}$个状态。</p>
+<h2 id="4-Factored-value-function"><a href="#4-Factored-value-function" class="headerlink" title="4. Factored value function"></a>4. Factored value function</h2><p>在一个决策问题中,我们评估状态价值，最终目是要求得一个最优决策即$\arg\max_h V(h)$。如果我们有上述的函数可分性质，同时知道所有的局部子函数$V_m$，该如何快速地求得最优的决策$h$呢？</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt8.PNG" alt="ppt8"></p>
+<p>这个问题早有研究，先考虑一个简单的问题：对于满足可分函数性质的函数$F$，求最小的$F(X)$。子函数$f_i(X_i)$仅与两个变量$X_i={x_i,x_{i+1}}$相关。</p>
+<p>这个问题可以使用动态规划的方法解决，相较于直接枚举X，复杂度由$O(|A|^M)\rightarrow O(M|A|^2)$。</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt9.PNG" alt="ppt9"></p>
+<p>一个更加复杂也更加普适的问题：我们不再限制$X_i$仅包含两个变量，而仅需是$X$的子集。</p>
+<p>实际上我们也可以采用一种动态规划算法——称为<strong>非序列动态规划或是消元法</strong>（VE）。</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt10.PNG" alt="ppt10"></p>
+<p>如上，组会slides中展示出了算法运行的一个例子。</p>
+<p>大致算法流程如下：</p>
+<ol>
+<li>选择消元顺序$x_{k_1},x_{k_2},…,x_{k_{n-1}},x_{k_n}$。</li>
+<li>找到所有当前消元变量$x_{k_i}$所在的所有函数。</li>
+<li>枚举所有函数涉及的所有变量，取最小值消去当前变量$x_{k_i}$计算新的函数。</li>
+<li>若仍存在消元变量跳到第二步，否则枚举最后一个函数变量计算最小值。</li>
+</ol>
+<p>该算法的复杂度取决于所有消元涉及的所有变量的数量/枚举空间的最大值。一个最优的消元顺序可以获得一个最小的上述值，该值等于对应的交互图的induced width。</p>
+<p>其复杂度为$O(n|A|^{D(G)})$,$D(G)$是对应的交互图的induced width。</p>
+<p>更多细节可以参考论文: Bertele, Umberto, and Francesco Brioschi. “On non-serial dynamic programming.” <em>J. Comb. Theory, Ser. A</em> 14.2 (1973): 137-148.</p>
+<h2 id="5-Previous-work"><a href="#5-Previous-work" class="headerlink" title="5. Previous work"></a>5. Previous work</h2><h3 id="5-1-Factored-value-function-amp-RL"><a href="#5-1-Factored-value-function-amp-RL" class="headerlink" title="5.1 Factored value function &amp; RL"></a>5.1 Factored value function &amp; RL</h3><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt11.PNG" alt="ppt11"></p>
+<p>很早就有在强化学习中使用这一技术的研究。我们以在Q-learning中的应用为例。上面的组会slides中展示了Q-learning地表格型与近似函数的更新式及对应的Factored value function性质。</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt12.PNG" alt="ppt12"></p>
+<p>将性质式带入近似函数的Q-learning更新式中，很容易得到新的更新式。</p>
+<p>这里，我们希望只需要对局部的$Q_j$建立近似函数，而$Q$则由局部函数组合得到。</p>
+<p>这样，类似于我们之前在第三部分最后关于表格型RL的讨论，局部函数的复杂性可以大大降低，因为其输入$x_j,a_j$的维数远远小于$x,a$。</p>
+<p>但是涉及到具体更新实现，仍会遇到问题。我们将$V$用$Q$替换以获得更加清晰的更新式：</p>
+<p>其中，$Q(x,a,w)$可以由$Q_i(x_i,a_i,w_i)$通过求和计算，$\nabla_{w_i}Q_i(x_i,a_i,w_i)$是我们维护的近似函数，可以直接计算获得。</p>
+<p>而实际上，最后的$\max_{a’}Q(x’,a’,w)=\max_{a_i’}\sum Q_i(x’_i,a’_i,w_i)$，与之前第四部分问题形式一致，可以通过VE算法获得。</p>
+<p>一个可行的分布式算法流程如下：</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt13-2.PNG" alt="ppt13-2"></p>
+<p>可以观察到在这个整体算法流程中我们只需要维护局部Q-value，至于<strong>局部Q-value（或者可以是其他形式的局部状态价值）具体是如何计算更新的并不关心</strong>。这意味着我们可以很自然地使用其他的强化学习算法，甚至不同agent可以使用不同的强化学习算法完成同一个任务。</p>
+<p>参考论文：Guestrin, Carlos, Michail Lagoudakis, and Ronald Parr. “Coordinated reinforcement learning.” <em>ICML</em>. Vol. 2. 2002.</p>
+<h3 id="5-1-Factored-value-function-amp-MCTS"><a href="#5-1-Factored-value-function-amp-MCTS" class="headerlink" title="5.1 Factored value function &amp; MCTS"></a>5.1 Factored value function &amp; MCTS</h3><p>正如上一部分最后提到的，我们只需要计算局部状态价值。那么是否可以使用MCTS来计算局部价值状态，然后使用相同的协同框架呢？</p>
+<p>是可以的。</p>
+<p>但是，我们需要考虑到，因为MCTS高效学习的一个关键在于采用了基于全局状态评估的UCB算法，来平衡探索以及挖掘。</p>
+<p>实际做法可以很简单：</p>
+<p>因为UCB值的形式同Q值类似，可以使用局部状态的UCB值的线性和近似全局的UCB值。</p>
+<p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt14.PNG" alt="ppt14"></p>
+<p>那么我们同样可以使用VE算法来计算一个最大的UCB值，来进行采样。</p>
+<p>在<em>Scalable planning and learning for multiagent POMDPs</em>这篇论文中作者提出了两种使用可分价值函数性质的MCTS算法。</p>
+<h4 id="5-1-1-Factored-Statistics"><a href="#5-1-1-Factored-Statistics" class="headerlink" title="5.1.1 Factored Statistics"></a>5.1.1 Factored Statistics</h4><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt15.PNG" alt="ppt15"></p>
+<p>算法运行在一棵搜索树上。树的节点表示一个联合的历史轨迹代表的状态集合$S(h)$。</p>
+<p>但是，我们不再维护规模巨大的$Q(h,a)$，而是节点上额外维护了<strong>全局状态的局部动作收益$Q_j(h,a_{K_j})$以及$N(h,a_{K_j})$。</strong></p>
+<p>通过VE算法，使用局部动作价值计算最大的UCB值。反向传播需要更新全局动作$a$或$o$对应的局部动作价值。其余步骤与原MCTS一致。</p>
+<p>由于其仍然是对联合历史轨迹$h$进行的状态评估及采样，不会破坏马尔可夫性质，因此，算法仍然能获得一个有效的收敛。</p>
+<p>右边是树结构的一个例子，在slides中还有更加详细的更新步骤实例。</p>
+<h4 id="5-1-2-Factored-Tree"><a href="#5-1-2-Factored-Tree" class="headerlink" title="5.1.2 Factored Tree"></a>5.1.2 Factored Tree</h4><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt17.PNG" alt="ppt17"></p>
+<p>不同于之前的树结构，Factored Tree使用了多棵搜索树，每棵树的节点代表一个局部的历史轨迹$h_j$。</p>
+<p>由于局部的历史轨迹可能不会满足马尔可夫性质，通过局部历史轨迹计算的局部状态价值只能是对于真实局部状态价值的一个估计。这可能会导致结果<strong>不能收敛</strong>，但是可以进一步增大节点的可重用性，减少需要采样的状态空间。</p>
+<p>更新式只是将$Q_j(h,a_{K_j})$替换为了$Q_j(h_{K_j},a_{K_j})$。由于$a/o$与边对应，反向传播时与经典的MCTS一致。</p>
+<p>右边是树结构的一个例子，在slides中还有更加详细的更新步骤实例。</p>
+<p>参考论文：</p>
+<p>Christopher Amato and Frans A. Oliehoek. Scalable planning and learning for multiagent POMDPs. InAAAI15, pages 1995–2002, January 2015</p>
+<h2 id="6-Main-Contributions"><a href="#6-Main-Contributions" class="headerlink" title="6.Main Contributions"></a>6.Main Contributions</h2><p>回到<em>Decentralized Patrolling Under Constraints in Dynamic Environments</em>这篇论文。</p>
+<p>正如我们之前在第三部分所证明的，相较于第五部分的工作，作者考虑的问题模型更加具体，它不仅满足了价值函数可分，同时其局部状态也是可分的，分别如下列左右两式所示：</p>
+<script type="math/tex; mode=display">
+V(h)=\sum_{A_m\in A}V(h_{K_m})=\sum_{A_m \in A}V_m(h_{K_m})</script><p>所以可以很自然地使用Factored Tree的框架。</p>
+<p>基于此，作者主要有三个主要贡献：</p>
+<ul>
+<li><p>健康约束：</p>
+<ul>
+<li>将代理的健康状态加入状态考虑中去，并令模拟过程中不满足健康约束的代理强行退出任务，以获得满足健康约束下的最优调度。</li>
+<li>对于有限视界内的模拟，使用启发式的健康约束$\hat{b}_m=b_m\frac{\tau(t)}{T-t}$，即估计受到的威胁在整个过程中是平均的。</li>
+</ul>
+</li>
+<li><p>分布式：</p>
+<ul>
+<li>解决了问题背景中对于代理的通信限制。</li>
+<li>使用max-sum算法分布式地实现VE算法的效果。</li>
+</ul>
+</li>
+<li><p>基于可分信念状态的粒子滤波：</p>
+<ul>
+<li><p>由于状态是可分的，局部的环境可以基于局部的状态及动作，即:</p>
+<p>  <img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt20.PNG" alt="ppt20"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-1-Max-sum"><a href="#6-1-Max-sum" class="headerlink" title="6.1 Max-sum"></a>6.1 Max-sum</h3><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt20-2.PNG" alt="ppt20-2"></p>
+<p>Max-sum是VE算法的一种分布式的替代方案。</p>
+<p>如右图所示，$x_i$表示变量，$U_i$表示函数。</p>
+<p>在每一轮的迭代中，变量节点$i$会为每一个交互的函数节点$j$计算函数$q_{i\rightarrow j(x_i)}$，函数节点$i$会为每一个交互的函数节点$j$计算函数$r_{i\rightarrow j(x_j)}$。</p>
+<p>通常，在分布式环境中，决策变量节点的计算任务交由对应决策的代理。函数节点的计算任务交由固定的某一个存在交互的代理。</p>
+<p>已经证明在一个无环图中，经过有限次迭代可以收敛。当环的数量为一时，收敛性也具有保证。大量实验表明，在一般图中的收敛结果良好。</p>
+<p>参考论文：Delle Fave, Francesco Maria, et al. “A methodology for deploying the max-sum algorithm and a case study on unmanned aerial vehicles.” (2012): 2275-2280.</p>
+<h2 id="Empirical-Evaluation"><a href="#Empirical-Evaluation" class="headerlink" title="Empirical Evaluation"></a>Empirical Evaluation</h2><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt21.PNG" alt="ppt21"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/18/Learning-based-Video-Motion-Magnification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1840,201 +2107,6 @@ t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="COOLA-LAB">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="COOLA-LAB">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/" itemprop="url">AdaFrame - Adaptive Frame Selection for Fast Video Recognition</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-30T16:57:38+08:00">
-                2020-08-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">每周一会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="1-Introduce"><a href="#1-Introduce" class="headerlink" title="1 Introduce"></a>1 Introduce</h2><p>本文中的场景为视频的快速描述，问题的输入是一段视频序列，输出是视频的类别或标签。目标为efficient video recognition。这类问题一般会对视频均匀采样取帧，这默认了视频的信息是均匀分布的，但实际上并非如此，均匀采样会取到无用的背景帧或冗余的信息帧。</p>
-<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/1.png" alt></p>
-<p>分类任务的类别不同，需要的帧数通常也不同，静态物体的识别一般只需要一帧，而复杂的动作识别需要多帧，同类别间也有可能需要不同帧数。 </p>
-<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/2.png" alt></p>
-<h2 id="2-Approach"><a href="#2-Approach" class="headerlink" title="2 Approach"></a>2 Approach</h2><p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/3.png" alt></p>
-<p>此图为网络的整体结构图。memory-agumented LSTM的输入是一个视频帧序列，在每个step中，将</p>
-<ol>
-<li>当前帧的特征vt</li>
-<li>前一个step的状态h(t-1)、c(t-1)</li>
-<li>从golbal memory中得到的Global context ut</li>
-</ol>
-<p>输入到LSTM中，得到当前step的隐藏状态h(t)，之后h(t)用来计算</p>
-<ol>
-<li>通过Prediction Network得到prediction向量st，用来计算Reward</li>
-<li>通过Selection Network得到action a，用来决定下一步看哪一帧图像</li>
-<li>通过Utility Network得到utility vt，用来判断继续看下一帧的预期收益</li>
-</ol>
-<h3 id="2-1-Memory-agumented-LSTM"><a href="#2-1-Memory-agumented-LSTM" class="headerlink" title="2.1 Memory-agumented LSTM"></a>2.1 Memory-agumented LSTM</h3><script type="math/tex; mode=display">
-h_{t},c_{t}=LSTM([v_{t},u_{t}],h_{t-1},c_{t-1})</script><p>帧特征 vt 跟 全局上下文特征 ut 拼接起来作为当前LSTM单元的输入。</p>
-<h4 id="Global-memory"><a href="#Global-memory" class="headerlink" title="Global memory"></a>Global memory</h4><p>global memory部分用于提供上下文信息，它的输入是经过空间和时间上降采样取到的帧的集合，用一个lightweight CNN分别提取他们的特征.</p>
-<script type="math/tex; mode=display">
-M=[v_1^s,v_1^s,...,v_{T_d}^s]</script><p>M为特征集合，由于只是分别对各个帧使用2D CNN，没有利用到时间信息，因此使用PE（position encoding）的方法来将位置信息嵌入到frames represetations中。</p>
-<script type="math/tex; mode=display">
-z_{t,j}=(W_hh_{t-1})^TPE(v_j^s)</script><p>使用soft-attention来获取global context information。根据上一个时刻的隐藏状态h(t-1)来给每个frame representation加上attention权值</p>
-<script type="math/tex; mode=display">
-\beta _t=Softmax(z_t)</script><script type="math/tex; mode=display">
-u_t = \beta _t^TM</script><h4 id="Reward-function"><a href="#Reward-function" class="headerlink" title="Reward function"></a>Reward function</h4><script type="math/tex; mode=display">
-    r_t=max\{0,m_t - max_{t^, \in[0,t-1]} m_{t^,}\}</script><script type="math/tex; mode=display">
-    m_t=s_t^{g^t}-max\{s_t^{c^,}|c^,\ne gt \}</script><p>mt代表预测出的对于ground-true类别的可能性比其他类别可能性最大值之间的差距。优化过程中会增大这个差距。Reward函数激励这个margin比历史margin更大，这样设计reward的目的是衡量这一帧是否有助于增大ground-true class的probability，这个帧是否是有意义的。</p>
-<h4 id="Selection-network"><a href="#Selection-network" class="headerlink" title="Selection network"></a>Selection network</h4><p>Selecttion network用来决定下一个step看哪一帧。</p>
-<script type="math/tex; mode=display">
-f_s(h_t;W_s)=a_t = sigmoid(W_s^Th_t)</script><p>直接用一个全连接层将隐藏状态ht映射到一个value上。然后再加上一个高斯分布采样（方差固定为0.01）。加入高斯分布的目的是在训练过程中加入噪声。在inference阶段不用高斯分布采样，直接用at，乘以总帧数就是下一帧的位置。可以发现下一帧不一定是后面的帧，也可以是前面的帧。</p>
-<p>这样训练selection network来最大化期望reward：</p>
-<script type="math/tex; mode=display">
-J_{sel}(W_s)=E_{l_t~\pi(.|h_t;W_s)[\sum _{t=0}^{T_e}r_t]}</script><h4 id="Utility-network"><a href="#Utility-network" class="headerlink" title="Utility network"></a>Utility network</h4><script type="math/tex; mode=display">
-f_u(h_t;W_u)=\hat V_t =W_u^Th</script><p>用一个全连接层ht映射为Vt，代表approximation of expected future rewards，其中expected future rewards可以采用公式计算：</p>
-<script type="math/tex; mode=display">
-V_t=E_{h_t{t+1}:T_e,a_t:T_e}[\sum_{t=0}^{T_e-t}\gamma^ir_{t+i}]</script><p>通过损失函数来训练：</p>
-<script type="math/tex; mode=display">
-L_{utl}(W_u)= {1\over 2}||\hat V_t-V_t||_2</script><h4 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h4><p>综合上述损失函数，最终的目标函数为：</p>
-<script type="math/tex; mode=display">
-minimize_\Theta L_{cls}+\lambda L_{utl}-\lambda J_{sel}</script><p>前两项可微，可以使用SGD反向传播更新参数即可。</p>
-<p>分析第三项的梯度如下：</p>
-<script type="math/tex; mode=display">
-\nabla _\Theta J_{sel} = E[\sum _{t=0}^{T_e}(R_t-\hat V_t)\nabla _\Theta log\pi _\Theta(.|h_t)]</script><p>vt作为baseline减小方差。Rt代表expected future reward。在一个mini-batch中用Monte-Carlo sampling来拟合。</p>
-<h3 id="2-2-Adaptive-Lookahead-Inference"><a href="#2-2-Adaptive-Lookahead-Inference" class="headerlink" title="2.2 Adaptive Lookahead Inference"></a>2.2 Adaptive Lookahead Inference</h3><p>前面讲到的utility network用来预测expected future rewards，看到将来取更多帧所带来的好处。因此根据utility network的输出来决定继续或者停止取帧。在每个时刻都计算vt，并记录vt的最大值，如果有p次当前值比最大值大一个阈值margin，则可停止。</p>
-<h2 id="3-Experiment"><a href="#3-Experiment" class="headerlink" title="3 Experiment"></a>3 Experiment</h2><h3 id="Dataset"><a href="#Dataset" class="headerlink" title="Dataset"></a>Dataset</h3><ul>
-<li><p>FCVID：91, 223 videos from YouTube. 共239个类别，平均167秒。trainset：45, 611 testset：45, 612</p>
-</li>
-<li><p>ACTIVITYNET：20K videos，共200个类别。平均117秒。train,val,test=10, 024 vs 4, 926 vs 5, 044。用val作为test。</p>
-</li>
-</ul>
-<h3 id="Main-Result"><a href="#Main-Result" class="headerlink" title="Main Result"></a>Main Result</h3><p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/4.png" alt></p>
-<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/5.png" alt></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2085,7 +2157,7 @@ minimize_\Theta L_{cls}+\lambda L_{utl}-\lambda J_{sel}</script><p>前两项可�
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2107,7 +2179,7 @@ minimize_\Theta L_{cls}+\lambda L_{utl}-\lambda J_{sel}</script><p>前两项可�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2144,7 +2216,7 @@ minimize_\Theta L_{cls}+\lambda L_{utl}-\lambda J_{sel}</script><p>前两项可�
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

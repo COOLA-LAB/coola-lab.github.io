@@ -248,6 +248,201 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/" itemprop="url">AdaFrame - Adaptive Frame Selection for Fast Video Recognition</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-30T16:57:38+08:00">
+                2020-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-Introduce"><a href="#1-Introduce" class="headerlink" title="1 Introduce"></a>1 Introduce</h2><p>本文中的场景为视频的快速描述，问题的输入是一段视频序列，输出是视频的类别或标签。目标为efficient video recognition。这类问题一般会对视频均匀采样取帧，这默认了视频的信息是均匀分布的，但实际上并非如此，均匀采样会取到无用的背景帧或冗余的信息帧。</p>
+<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/1.png" alt></p>
+<p>分类任务的类别不同，需要的帧数通常也不同，静态物体的识别一般只需要一帧，而复杂的动作识别需要多帧，同类别间也有可能需要不同帧数。 </p>
+<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/2.png" alt></p>
+<h2 id="2-Approach"><a href="#2-Approach" class="headerlink" title="2 Approach"></a>2 Approach</h2><p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/3.png" alt></p>
+<p>此图为网络的整体结构图。memory-agumented LSTM的输入是一个视频帧序列，在每个step中，将</p>
+<ol>
+<li>当前帧的特征vt</li>
+<li>前一个step的状态h(t-1)、c(t-1)</li>
+<li>从golbal memory中得到的Global context ut</li>
+</ol>
+<p>输入到LSTM中，得到当前step的隐藏状态h(t)，之后h(t)用来计算</p>
+<ol>
+<li>通过Prediction Network得到prediction向量st，用来计算Reward</li>
+<li>通过Selection Network得到action a，用来决定下一步看哪一帧图像</li>
+<li>通过Utility Network得到utility vt，用来判断继续看下一帧的预期收益</li>
+</ol>
+<h3 id="2-1-Memory-agumented-LSTM"><a href="#2-1-Memory-agumented-LSTM" class="headerlink" title="2.1 Memory-agumented LSTM"></a>2.1 Memory-agumented LSTM</h3><script type="math/tex; mode=display">
+h_{t},c_{t}=LSTM([v_{t},u_{t}],h_{t-1},c_{t-1})</script><p>帧特征 vt 跟 全局上下文特征 ut 拼接起来作为当前LSTM单元的输入。</p>
+<h4 id="Global-memory"><a href="#Global-memory" class="headerlink" title="Global memory"></a>Global memory</h4><p>global memory部分用于提供上下文信息，它的输入是经过空间和时间上降采样取到的帧的集合，用一个lightweight CNN分别提取他们的特征.</p>
+<script type="math/tex; mode=display">
+M=[v_1^s,v_1^s,...,v_{T_d}^s]</script><p>M为特征集合，由于只是分别对各个帧使用2D CNN，没有利用到时间信息，因此使用PE（position encoding）的方法来将位置信息嵌入到frames represetations中。</p>
+<script type="math/tex; mode=display">
+z_{t,j}=(W_hh_{t-1})^TPE(v_j^s)</script><p>使用soft-attention来获取global context information。根据上一个时刻的隐藏状态h(t-1)来给每个frame representation加上attention权值</p>
+<script type="math/tex; mode=display">
+\beta _t=Softmax(z_t)</script><script type="math/tex; mode=display">
+u_t = \beta _t^TM</script><h4 id="Reward-function"><a href="#Reward-function" class="headerlink" title="Reward function"></a>Reward function</h4><script type="math/tex; mode=display">
+    r_t=max\{0,m_t - max_{t^, \in[0,t-1]} m_{t^,}\}</script><script type="math/tex; mode=display">
+    m_t=s_t^{g^t}-max\{s_t^{c^,}|c^,\ne gt \}</script><p>mt代表预测出的对于ground-true类别的可能性比其他类别可能性最大值之间的差距。优化过程中会增大这个差距。Reward函数激励这个margin比历史margin更大，这样设计reward的目的是衡量这一帧是否有助于增大ground-true class的probability，这个帧是否是有意义的。</p>
+<h4 id="Selection-network"><a href="#Selection-network" class="headerlink" title="Selection network"></a>Selection network</h4><p>Selecttion network用来决定下一个step看哪一帧。</p>
+<script type="math/tex; mode=display">
+f_s(h_t;W_s)=a_t = sigmoid(W_s^Th_t)</script><p>直接用一个全连接层将隐藏状态ht映射到一个value上。然后再加上一个高斯分布采样（方差固定为0.01）。加入高斯分布的目的是在训练过程中加入噪声。在inference阶段不用高斯分布采样，直接用at，乘以总帧数就是下一帧的位置。可以发现下一帧不一定是后面的帧，也可以是前面的帧。</p>
+<p>这样训练selection network来最大化期望reward：</p>
+<script type="math/tex; mode=display">
+J_{sel}(W_s)=E_{l_t~\pi(.|h_t;W_s)[\sum _{t=0}^{T_e}r_t]}</script><h4 id="Utility-network"><a href="#Utility-network" class="headerlink" title="Utility network"></a>Utility network</h4><script type="math/tex; mode=display">
+f_u(h_t;W_u)=\hat V_t =W_u^Th</script><p>用一个全连接层ht映射为Vt，代表approximation of expected future rewards，其中expected future rewards可以采用公式计算：</p>
+<script type="math/tex; mode=display">
+V_t=E_{h_t{t+1}:T_e,a_t:T_e}[\sum_{t=0}^{T_e-t}\gamma^ir_{t+i}]</script><p>通过损失函数来训练：</p>
+<script type="math/tex; mode=display">
+L_{utl}(W_u)= {1\over 2}||\hat V_t-V_t||_2</script><h4 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h4><p>综合上述损失函数，最终的目标函数为：</p>
+<script type="math/tex; mode=display">
+minimize_\Theta L_{cls}+\lambda L_{utl}-\lambda J_{sel}</script><p>前两项可微，可以使用SGD反向传播更新参数即可。</p>
+<p>分析第三项的梯度如下：</p>
+<script type="math/tex; mode=display">
+\nabla _\Theta J_{sel} = E[\sum _{t=0}^{T_e}(R_t-\hat V_t)\nabla _\Theta log\pi _\Theta(.|h_t)]</script><p>vt作为baseline减小方差。Rt代表expected future reward。在一个mini-batch中用Monte-Carlo sampling来拟合。</p>
+<h3 id="2-2-Adaptive-Lookahead-Inference"><a href="#2-2-Adaptive-Lookahead-Inference" class="headerlink" title="2.2 Adaptive Lookahead Inference"></a>2.2 Adaptive Lookahead Inference</h3><p>前面讲到的utility network用来预测expected future rewards，看到将来取更多帧所带来的好处。因此根据utility network的输出来决定继续或者停止取帧。在每个时刻都计算vt，并记录vt的最大值，如果有p次当前值比最大值大一个阈值margin，则可停止。</p>
+<h2 id="3-Experiment"><a href="#3-Experiment" class="headerlink" title="3 Experiment"></a>3 Experiment</h2><h3 id="Dataset"><a href="#Dataset" class="headerlink" title="Dataset"></a>Dataset</h3><ul>
+<li><p>FCVID：91, 223 videos from YouTube. 共239个类别，平均167秒。trainset：45, 611 testset：45, 612</p>
+</li>
+<li><p>ACTIVITYNET：20K videos，共200个类别。平均117秒。train,val,test=10, 024 vs 4, 926 vs 5, 044。用val作为test。</p>
+</li>
+</ul>
+<h3 id="Main-Result"><a href="#Main-Result" class="headerlink" title="Main Result"></a>Main Result</h3><p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/4.png" alt></p>
+<p><img src="/2020/08/30/AdaFrame-Adaptive-Frame-Selection-for-Fast-Video-Recognition/5.png" alt></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/11/Tagoram-Real-Time-Tracking-of-Mobile-RFID-Tags-to-High-Precision-Using-COTS-Devices/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1151,7 +1346,7 @@ c x+k, & x>0
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1173,7 +1368,7 @@ c x+k, & x>0
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1210,7 +1405,7 @@ c x+k, & x>0
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
