@@ -358,13 +358,10 @@
 <p>神经网络要完成的目标：成功预测到$t$时间步时，点集所构成的数据结构的连接状态。</p>
 <h3 id="3-2-Architecture-of-Networks"><a href="#3-2-Architecture-of-Networks" class="headerlink" title="3.2 Architecture of Networks"></a>3.2 Architecture of Networks</h3><p>本文搭建的神经网络模型如下图所示：</p>
 <p><img src="/2021/01/21/Pointer-Graph-Networks/1.png" alt="avatar" style="zoom:50%;"></p>
-<script type="math/tex; mode=display">\vec{z}^{(t)}_i = f( \vec{e}^{(t)}_i,\vec{h}^{(t-1)}_i )\tag{1}$$,
-
-其中$f$指的是encoder network，$\vec{z}^{(t)}_i$代表了encoder输出的状态值，$\vec{h}^{(t-1)}_i$代表$t-1$时间步的隐状态.
-
-然后将$Z(t)$输入到一个处理网络Processor P，用于计算下一时刻的隐状态：
-
-$$H(t) = P(Z^{(t)},\Pi^{(t-1)})\tag{2}</script><p>其中$\Pi^{(t-1)}$代表了$t-1$时刻之后点之间的连接状态的groundtruth，可以理解为一个邻接矩阵，矩阵中0值代表两个点没有相连，1代表两个点相连</p>
+<p>$\vec{z}^{(t)}_i = f( \vec{e}^{(t)}_i,\vec{h}^{(t-1)}_i )\tag{1}$,</p>
+<p>其中$f$指的是encoder network，$\vec{z}^{(t)}_i$代表了encoder输出的状态值，$\vec{h}^{(t-1)}_i$代表$t-1$时间步的隐状态.</p>
+<p>然后将$Z(t)$输入到一个处理网络Processor P，用于计算下一时刻的隐状态：</p>
+<script type="math/tex; mode=display">H(t) = P(Z^{(t)},\Pi^{(t-1)})\tag{2}</script><p>其中$\Pi^{(t-1)}$代表了$t-1$时刻之后点之间的连接状态的groundtruth，可以理解为一个邻接矩阵，矩阵中0值代表两个点没有相连，1代表两个点相连</p>
 <p>接着通过读出操作，计算出decoder输出$\vec{y}^{(t)}$：</p>
 <script type="math/tex; mode=display">\vec{y}^{(t)} = g(\bigoplus_i\vec{z}^{(t)}_i, \bigoplus_i\vec{h}^{(t)}_i)\tag{3}</script><p>为了更新邻接矩阵$\Pi^{(t)}$，网络利用了attention机制，计算出当前时间步下，实体$i$与其他所有实体之间的相关程度，从而将最相关的点进行相连。</p>
 <p>利用一个mask操作$\mu_i^{(t)}$ $\in{0,1}$对$\Pi^{(t)}$进行更新操作，计算每一个点实施的mask值：</p>
