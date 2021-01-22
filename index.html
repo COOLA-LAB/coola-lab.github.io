@@ -248,6 +248,197 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/21/Pointer-Graph-Networks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="COOLA-LAB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="COOLA-LAB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/21/Pointer-Graph-Networks/" itemprop="url">Pointer Graph Networks</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-21T19:00:00+08:00">
+                2021-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇论文对于现有图神经网络（GNN）处理动态图数据结构能力不足的现状，将Pointer的概念加入到图两点之间，动态地学习图数据结构生成的过程，取得了良好的效果，为之后进一步提高模型泛化能力奠定基础。</p>
+<h2 id="1-Background"><a href="#1-Background" class="headerlink" title="1. Background"></a>1. Background</h2><p>GNN在处理静态图结构的问题上表现优异，但如果随着点集规模不断扩大，点之间的关系也随之增加，潜在的图结构也会以指数型递增，对于现有GNN提出了艰巨的挑战。Pointer Graph Networks（PGN）加入pointer的设置，通过pointer学习点与点之间的关系模式，从已知的小规模图结构，推测出整体的图结构。</p>
+<h2 id="2-Contributions"><a href="#2-Contributions" class="headerlink" title="2. Contributions"></a>2. Contributions</h2><ul>
+<li><p>用神经网络执行的方式来学习和处理基于图结构的算法过程；</p>
+</li>
+<li><p>利用有监督学习的方法进行潜在图结构的学习和预测；</p>
+</li>
+<li><p>能够批量生产基于相同拓扑结构的图数据。</p>
+</li>
+</ul>
+<h2 id="3-Main-Idea"><a href="#3-Main-Idea" class="headerlink" title="3. Main Idea"></a>3. Main Idea</h2><h3 id="3-1-Paradigm"><a href="#3-1-Paradigm" class="headerlink" title="3.1 Paradigm"></a>3.1 Paradigm</h3><p>PGN利用了Encoder-Decoder的结构：</p>
+<p>输入序列：$\xi^{(1)}$, $\xi^{(2)}$,…,   其中<script type="math/tex">\xi^{(t)} = {\{\vec{e}^{(t)}_1,\vec{e}^{(t)}_2,...,\vec{e}^{(t)}_n\}}</script></p>
+<p>$\vec{e}^{(t)}_i$代表了实体$i$在$t$时间步所进行的操作</p>
+<p>目标输出：$\vec{y}^{(t)}$是一个0-1的指示方程，表示的是两个点之间的连接状态。</p>
+<p>神经网络要完成的目标：成功预测到$t$时间步时，点集所构成的数据结构的连接状态。</p>
+<h3 id="3-2-Architecture-of-Networks"><a href="#3-2-Architecture-of-Networks" class="headerlink" title="3.2 Architecture of Networks"></a>3.2 Architecture of Networks</h3><p>本文搭建的神经网络模型如下图所示：</p>
+<p><img src="/2021/01/21/Pointer-Graph-Networks/1.png" alt="avatar" style="zoom:50%;"></p>
+<script type="math/tex; mode=display">\vec{z}^{(t)}_i = f( \vec{e}^{(t)}_i,\vec{h}^{(t-1)}_i )\tag{1}$$,
+
+其中$f$指的是encoder network，$\vec{z}^{(t)}_i$代表了encoder输出的状态值，$\vec{h}^{(t-1)}_i$代表$t-1$时间步的隐状态.
+
+然后将$Z(t)$输入到一个处理网络Processor P，用于计算下一时刻的隐状态：
+
+$$H(t) = P(Z^{(t)},\Pi^{(t-1)})\tag{2}</script><p>其中$\Pi^{(t-1)}$代表了$t-1$时刻之后点之间的连接状态的groundtruth，可以理解为一个邻接矩阵，矩阵中0值代表两个点没有相连，1代表两个点相连</p>
+<p>接着通过读出操作，计算出decoder输出$\vec{y}^{(t)}$：</p>
+<script type="math/tex; mode=display">\vec{y}^{(t)} = g(\bigoplus_i\vec{z}^{(t)}_i, \bigoplus_i\vec{h}^{(t)}_i)\tag{3}</script><p>为了更新邻接矩阵$\Pi^{(t)}$，网络利用了attention机制，计算出当前时间步下，实体$i$与其他所有实体之间的相关程度，从而将最相关的点进行相连。</p>
+<p>利用一个mask操作$\mu_i^{(t)}$ $\in{0,1}$对$\Pi^{(t)}$进行更新操作，计算每一个点实施的mask值：</p>
+<script type="math/tex; mode=display">P(\mu_i)^{(t)} = \psi(\vec{z}^{(t)}_i,\vec{h}^{(t)}_i) \in(0,1)\tag{4}</script><script type="math/tex; mode=display">\mu_i^{(t)} = II{\psi(\vec{z}^{(t)}_i,\vec{h}^{(t)}_i)>0.5}\tag{5}</script><p>其中$II{\psi(\vec{z}^{(t)}_i,\vec{h}^{(t)}_i)&gt;0.5}$表示当$\psi$大于0.5时，整个式子的值为1，否则为0.</p>
+<p>基于self-attention计算实体$i$与其他实体$j$之间的相关程度：</p>
+<script type="math/tex; mode=display">\vec{q}^{(t)}_i = W_q\vec{h}^{(t)}_i  \quad \vec{k}^{(t)}_i = W_k\vec{h}^{(t)}_i  \quad \vec{\alpha}^{(t)}_{ij} = softmax(<\vec{q}^{(t)}_i ,\vec{k}^{(t)}_i>) \tag{6}</script><p>其中$\vec{\alpha}^{(t)}_{ij}$代表了实体$i$与其他实体$j$之间的相关程度</p>
+<p>根据self-attention计算出的$\alpha$,更新监督矩阵$\Pi^{(t)}$：</p>
+<script type="math/tex; mode=display">\tilde{\Pi}^{(t)}_{ij} = \mu_i^{(t)}\tilde{\Pi}^{(t-1)}_{ij} + （1-\mu_i^{(t)}）II_{argmax_k(\alpha_{ik}^{(t)})} \quad \Pi^{(t)}_{ij} = \tilde{\Pi}^{(t)}_{ij}\bigvee \tilde{\Pi}^{(t)}_{ji} \tag{7}</script><h3 id="3-2-training-model"><a href="#3-2-training-model" class="headerlink" title="3.2 training model"></a>3.2 training model</h3><p>在神经网络训练的过程中，计算了三种loss，用来进行网络参数的更新，如图所示：</p>
+<p><img src="/2021/01/21/Pointer-Graph-Networks/2.png" alt="avatar" style="zoom:50%;"></p>
+<ul>
+<li>$\vec{y}^{(t)}$ against groundtruth $\hat{y}^{(t)}$</li>
+<li>$\alpha^{(t)}{ij}$ against groundtruth $\hat{\Pi}^{(t)}_i$</li>
+<li>$\Psi$ against modification $\hat{\mu}^{(t)}_i$</li>
+</ul>
+<h2 id="4-Task"><a href="#4-Task" class="headerlink" title="4. Task"></a>4. Task</h2><p>本文提出神经网络模型主要用于解决动态图的连接问题，基本思路将图定义为Incremental Graph，即图的任意两点之间在刚开始是不存关系的，通过后续的操作将图中的关系补充完整。</p>
+<p>下面将通过两个图问题的实例具体解释说明神经网络执行过程：</p>
+<h3 id="4-1-Disjoint-set-union"><a href="#4-1-Disjoint-set-union" class="headerlink" title="4.1 Disjoint-set union"></a>4.1 Disjoint-set union</h3><p>并查集主要是用于查询两个元素是否在同一集合中或两者之间是否存在连接关系。init将所有节点的父节点设为自己，find最终返回该元素所在树的根节点，union将两棵树合并成一棵树，如图所示：</p>
+<p><img src="/2021/01/21/Pointer-Graph-Networks/3.png" alt="avatar" style="zoom:50%;"></p>
+<p>PGN处理并查集的时候，对于点的操作就是从以上的三种中进行，通过一个query-union的方法对数据集进行构建：</p>
+<p><img src="/2021/01/21/Pointer-Graph-Networks/4.png" alt="avatar" style="zoom:50%;"></p>
+<h3 id="4-2-Link-Cut-Trees"><a href="#4-2-Link-Cut-Trees" class="headerlink" title="4.2 Link/Cut Trees"></a>4.2 Link/Cut Trees</h3><p>LCTs是一种动态的树结构，用于处理不同树结构节点之间进行转移、切割以及连接的操作。本文神经网络主要用于检查LCTs中两个节点的连接状态。相对应的操作函数有find-root(u), link(u, v), cut(v), evert(u) 。</p>
+<p><img src="/2021/01/21/Pointer-Graph-Networks/5.png" alt="avatar" style="zoom:50%;"></p>
+<p>PGN处理LCTs的时候，对于点的操作就是从以上的函数中进行，通过一个query-toogle的方法对数据集进行构建：</p>
+<p><img src="/2021/01/21/Pointer-Graph-Networks/6.png" alt="avatar" style="zoom:50%;"></p>
+<h2 id="5-Experiment"><a href="#5-Experiment" class="headerlink" title="5. Experiment"></a>5. Experiment</h2><p><img src="/2021/01/21/Pointer-Graph-Networks/7.png" alt="avatar" style="zoom:50%;"></p>
+<p>通过实验可以看出，随着点集的规模变大，PGN在准确程度方面比传统的GNN有了非常明显的提高。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1948,165 +2139,6 @@ L_{multi}=\alpha L_{pixel}(I_1,\widetilde I^{(3)}_1)+(1-\alpha)L_{SSIM}(I_1,\wid
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="COOLA-LAB">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="COOLA-LAB">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/" itemprop="url">Learning RoI Transformer for Detecting Oriented Objects in Aerial Images</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-10T13:22:00+08:00">
-                2020-09-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%AF%8F%E5%91%A8%E4%B8%80%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">每周一会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="1-问题定义"><a href="#1-问题定义" class="headerlink" title="1.问题定义"></a>1.问题定义</h2><p>目标检测是计算机视觉领域的一个基本问题, 其目标是在场景中快速、精确地定位、识别特定目标，从而为很多计算机视觉应用场景提供重要的信息基础。近年来，该领域随着深度学习技术的快速发展取得了显著的突破，然而由于俯瞰视角、高度复杂的背景以及物体多样的外观，航拍图像中的物体检测是计算机视觉中一项具有挑战性的任务。特别是当在航拍图像中检测密集的物体时，依赖于水平候选框（Horizontal Region of Interest ，HRoI)的普通目标检测的方法经常引入候选框和物体之间的不匹配，并最终导致物体分类和定位的误差。</p>
-<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2.相关工作"></a>2.相关工作</h2><p>由于基于HRoI的方法总是从水平的特征图中提取特征并进行边框回归，因此对于旋转的物体并不能达到很好的精度。在此之前也有一些方法使用Rotated anchor 来解决这个问题，但是它们的设计总是使 anchor 的数量倍增并且显著增加了计算复杂性。</p>
-<h2 id="3-本文工作"><a href="#3-本文工作" class="headerlink" title="3.本文工作"></a>3.本文工作</h2><p>本文针对旋转的物体仍然使用Horizontal anchors，在有有向边界框标注的前提下，提出新的方法 RoI Transformer。核心思想是先生成HRoI,再利用空间特征信息学习到偏转角度参数，最后作相应的调整以达到旋转不变性，同时解决了大量的anchor设计以及特征不匹配的问题。</p>
-<p>本文基于 Light Head R-CNN 进行改进，提出了两个新的模块：</p>
-<ul>
-<li><p>RRoI Learner ：此模块会将 HRoI 传递给 PS RoI Align 层， 再接一个轻量的维度为5的全连接层，回归 Rotated Ground Truths 相对于HRoIs的偏移, 通过解码器将 HRoI 和偏移量作为输入并输出的 RRoI:</p>
-<script type="math/tex; mode=display">
-  (t_x,t_y,t_w,t_h,t_\theta）</script></li>
-<li><p>RRoI Transformer：经过RRoI Learner学习到了旋转参数后，我么在这里就能扭曲特征图以保持深度特征的旋转不变性。RRoI Learner 和 RRoI 变形的组合构成了 RoI Transformer ，然后使用来自 RoI Transformer 的几何鲁棒合并的特征进行 RRoI 的分类和回归。</p>
-</li>
-</ul>
-<p><img src="/2020/09/10/Learning-RoI-Transformer-for-Detecting-Oriented-Objects-in-Aerial-Images/architecture.png" alt></p>
-<p>由于我们想要实现物体的旋转不变性特征，而通用检测的损失函数在这里就会出现问题了，在不同角度的情况下，两个旋转幅度相同的RRoI和RGT却会出现不同的横纵坐标偏移量。于是作者基于局部坐标系，对损失函数进行了修改：</p>
-<script type="math/tex; mode=display">
-t^*_x=1/w_r((x^*-x_r)cos\theta_r+(y^*-y_r)sin\theta_r),</script><script type="math/tex; mode=display">
-t^*_y=1/h_r((y^*-y_r)cos\theta_r-(x^*-x_r)sin\theta_r),</script><script type="math/tex; mode=display">
-t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满足物体相对偏移的旋转不变性来实现了物体特征的旋转不变性，并学习到旋转角度。</p>
-<p>本文通过 RoI Transformer 模块模拟几何变换并解决区域特征和物体的不匹配问题，为具有挑战性的 DOTA 和 HRSC 数据集的旋转物体检测带来了显著的改进。对于旋转物体，在有有向边界框标注的情况下， RoI Transformer模块更为合理。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2157,7 +2189,7 @@ t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2179,7 +2211,7 @@ t^*_\theta=1/2\pi((\theta^*-\theta_r) mod2 \pi)</script><p>这样我们通过满
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
