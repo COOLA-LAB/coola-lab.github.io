@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt20-2.PNG">
 <meta property="og:image" content="http://yoursite.com/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt21.PNG">
 <meta property="article:published_time" content="2021-01-16T07:45:00.000Z">
-<meta property="article:modified_time" content="2021-01-22T02:26:17.917Z">
+<meta property="article:modified_time" content="2021-01-22T02:28:38.376Z">
 <meta property="article:author" content="COOLA-LAB">
 <meta property="article:tag" content="-MCTS -分布式 -强化学习 -因子图">
 <meta name="twitter:card" content="summary">
@@ -365,9 +365,8 @@
       
 
       
-        <pre><code>作者研究了一个考虑信息与威胁分布的基于动态环境的分散巡逻问题。在这个问题中，代理可以在某个位置获取信息，但同时可能会受到该位置威胁的攻击。每个代理以分散的方式在环境中的指定区域巡逻，并与有限数量的代理进行交互。这些代理的目标是相互协调以收集尽可能多的信息，同时限制所受到的损害。因此，作者将这类问题建模为具有健康约束的部分可观测的马尔可夫决策过程。此外，作者提出了基于蒙特卡罗树搜索和因子置信向量的可伸缩分散在线算法。
-本次组会将由该论文展开，简略地讲述如何使用传统的组合优化算法来有效地解决一种具有可分状态及可分价值函数结构特性的复杂强化学习任务。这份简报将按照组会slides的顺序讲述，并为感兴趣的同学补充更多的细节。
-</code></pre><h2 id="1-Environments"><a href="#1-Environments" class="headerlink" title="1. Environments"></a>1. Environments</h2><h3 id="1-1-Patrolling-Environments"><a href="#1-1-Patrolling-Environments" class="headerlink" title="1.1 Patrolling Environments"></a>1.1 Patrolling Environments</h3><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt2.PNG" alt="ppt2"></p>
+        <p>作者研究了一个考虑信息与威胁分布的基于动态环境的分散巡逻问题。在这个问题中，代理可以在某个位置获取信息，但同时可能会受到该位置威胁的攻击。每个代理以分散的方式在环境中的指定区域巡逻，并与有限数量的代理进行交互。这些代理的目标是相互协调以收集尽可能多的信息，同时限制所受到的损害。因此，作者将这类问题建模为具有健康约束的部分可观测的马尔可夫决策过程。此外，作者提出了基于蒙特卡罗树搜索和因子置信向量的可伸缩分散在线算法。<br>本次组会将由该论文展开，简略地讲述如何使用传统的组合优化算法来有效地解决一种具有可分状态及可分价值函数结构特性的复杂强化学习任务。这份简报将按照组会slides的顺序讲述，并为感兴趣的同学补充更多的细节。</p>
+<h2 id="1-Environments"><a href="#1-Environments" class="headerlink" title="1. Environments"></a>1. Environments</h2><h3 id="1-1-Patrolling-Environments"><a href="#1-1-Patrolling-Environments" class="headerlink" title="1.1 Patrolling Environments"></a>1.1 Patrolling Environments</h3><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt2.PNG" alt="ppt2"></p>
 <p>这篇论文将巡逻环境建模为一个<strong>无向图</strong>$G$，并将任务限制在$T$个时间片内。</p>
 <p>每个节点$v$有一个状态，其所处的状态可以用两个互相独立的<strong>状态变量</strong>$e_v^R$及$e_v^I$表示。</p>
 <p>在这个包含<strong>不确定性</strong>的任务环境下，我们通常<strong>无法确定节点所处的状态</strong>，相反，我们实际使用<strong>信念向量$w_v^R/w_v^I$表示/评估节点处于各个状态概率</strong>。</p>
@@ -437,7 +436,7 @@
 <p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt13-2.PNG" alt="ppt13-2"></p>
 <p>可以观察到在这个整体算法流程中我们只需要维护局部Q-value，至于<strong>局部Q-value（或者可以是其他形式的局部状态价值）具体是如何计算更新的并不关心</strong>。这意味着我们可以很自然地使用其他的强化学习算法，甚至不同agent可以使用不同的强化学习算法完成同一个任务。</p>
 <p>参考论文：Guestrin, Carlos, Michail Lagoudakis, and Ronald Parr. “Coordinated reinforcement learning.” <em>ICML</em>. Vol. 2. 2002.</p>
-<h3 id="5-1-Factored-value-function-amp-MCTS"><a href="#5-1-Factored-value-function-amp-MCTS" class="headerlink" title="5.1 Factored value function &amp; MCTS"></a>5.1 Factored value function &amp; MCTS</h3><p>正如上一部分最后提到的，我们只需要计算局部状态价值。那么是否可以使用MCTS来计算局部价值状态，然后使用相同的协同框架呢？</p>
+<h3 id="5-2-Factored-value-function-amp-MCTS"><a href="#5-2-Factored-value-function-amp-MCTS" class="headerlink" title="5.2 Factored value function &amp; MCTS"></a>5.2 Factored value function &amp; MCTS</h3><p>正如上一部分最后提到的，我们只需要计算局部状态价值。那么是否可以使用MCTS来计算局部价值状态，然后使用相同的协同框架呢？</p>
 <p>是可以的。</p>
 <p>但是，我们需要考虑到，因为MCTS高效学习的一个关键在于采用了基于全局状态评估的UCB算法，来平衡探索以及挖掘。</p>
 <p>实际做法可以很简单：</p>
@@ -445,13 +444,13 @@
 <p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt14.PNG" alt="ppt14"></p>
 <p>那么我们同样可以使用VE算法来计算一个最大的UCB值，来进行采样。</p>
 <p>在<em>Scalable planning and learning for multiagent POMDPs</em>这篇论文中作者提出了两种使用可分价值函数性质的MCTS算法。</p>
-<h4 id="5-1-1-Factored-Statistics"><a href="#5-1-1-Factored-Statistics" class="headerlink" title="5.1.1 Factored Statistics"></a>5.1.1 Factored Statistics</h4><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt15.PNG" alt="ppt15"></p>
+<h4 id="5-2-1-Factored-Statistics"><a href="#5-2-1-Factored-Statistics" class="headerlink" title="5.2.1 Factored Statistics"></a>5.2.1 Factored Statistics</h4><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt15.PNG" alt="ppt15"></p>
 <p>算法运行在一棵搜索树上。树的节点表示一个联合的历史轨迹代表的状态集合$S(h)$。</p>
 <p>但是，我们不再维护规模巨大的$Q(h,a)$，而是节点上额外维护了<strong>全局状态的局部动作收益$Q_j(h,a_{K_j})$以及$N(h,a_{K_j})$。</strong></p>
 <p>通过VE算法，使用局部动作价值计算最大的UCB值。反向传播需要更新全局动作$a$或$o$对应的局部动作价值。其余步骤与原MCTS一致。</p>
 <p>由于其仍然是对联合历史轨迹$h$进行的状态评估及采样，不会破坏马尔可夫性质，因此，算法仍然能获得一个有效的收敛。</p>
 <p>右边是树结构的一个例子，在slides中还有更加详细的更新步骤实例。</p>
-<h4 id="5-1-2-Factored-Tree"><a href="#5-1-2-Factored-Tree" class="headerlink" title="5.1.2 Factored Tree"></a>5.1.2 Factored Tree</h4><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt17.PNG" alt="ppt17"></p>
+<h4 id="5-2-2-Factored-Tree"><a href="#5-2-2-Factored-Tree" class="headerlink" title="5.2.2 Factored Tree"></a>5.2.2 Factored Tree</h4><p><img src="/2021/01/16/Decentralized-Patrolling-Under-Constraints-in-Dynamic-Environments/ppt17.PNG" alt="ppt17"></p>
 <p>不同于之前的树结构，Factored Tree使用了多棵搜索树，每棵树的节点代表一个局部的历史轨迹$h_j$。</p>
 <p>由于局部的历史轨迹可能不会满足马尔可夫性质，通过局部历史轨迹计算的局部状态价值只能是对于真实局部状态价值的一个估计。这可能会导致结果<strong>不能收敛</strong>，但是可以进一步增大节点的可重用性，减少需要采样的状态空间。</p>
 <p>更新式只是将$Q_j(h,a_{K_j})$替换为了$Q_j(h_{K_j},a_{K_j})$。由于$a/o$与边对应，反向传播时与经典的MCTS一致。</p>
@@ -666,7 +665,7 @@ V(h)=\sum_{A_m\in A}V(h_{K_m})=\sum_{A_m \in A}V_m(h_{K_m})</script><p>所以可
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Environments"><span class="nav-text">1. Environments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Patrolling-Environments"><span class="nav-text">1.1 Patrolling Environments</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Patrolling-Agents"><span class="nav-text">1.2 Patrolling Agents</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MCTS"><span class="nav-text">2. MCTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Main-Idea"><span class="nav-text">3. Main Idea</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Motivation"><span class="nav-text">Motivation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Factored-value-function"><span class="nav-text">4. Factored value function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Previous-work"><span class="nav-text">5. Previous work</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-Factored-value-function-amp-RL"><span class="nav-text">5.1 Factored value function &amp; RL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-Factored-value-function-amp-MCTS"><span class="nav-text">5.1 Factored value function &amp; MCTS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-1-Factored-Statistics"><span class="nav-text">5.1.1 Factored Statistics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-2-Factored-Tree"><span class="nav-text">5.1.2 Factored Tree</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Main-Contributions"><span class="nav-text">6.Main Contributions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Max-sum"><span class="nav-text">6.1 Max-sum</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Empirical-Evaluation"><span class="nav-text">Empirical Evaluation</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Environments"><span class="nav-text">1. Environments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Patrolling-Environments"><span class="nav-text">1.1 Patrolling Environments</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Patrolling-Agents"><span class="nav-text">1.2 Patrolling Agents</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MCTS"><span class="nav-text">2. MCTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Main-Idea"><span class="nav-text">3. Main Idea</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Motivation"><span class="nav-text">Motivation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Factored-value-function"><span class="nav-text">4. Factored value function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Previous-work"><span class="nav-text">5. Previous work</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-Factored-value-function-amp-RL"><span class="nav-text">5.1 Factored value function &amp; RL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Factored-value-function-amp-MCTS"><span class="nav-text">5.2 Factored value function &amp; MCTS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-1-Factored-Statistics"><span class="nav-text">5.2.1 Factored Statistics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-2-Factored-Tree"><span class="nav-text">5.2.2 Factored Tree</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Main-Contributions"><span class="nav-text">6.Main Contributions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-Max-sum"><span class="nav-text">6.1 Max-sum</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Empirical-Evaluation"><span class="nav-text">Empirical Evaluation</span></a></li></ol></div>
             
 
           </div>
